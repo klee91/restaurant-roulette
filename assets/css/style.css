@@ -13,7 +13,7 @@ Fonts:
 	font-family: 'Oswald', sans-serif; 
 
 To Do list:
-	- style restaurant portfolio
+	- web layout 
 
 */
 
@@ -75,6 +75,7 @@ To Do list:
 #paramColumn
 {
 	background-color: #F83000;
+
 }
 
 #paramColumn .row div
@@ -204,7 +205,6 @@ h6
 	position: relative;
 	bottom: 8px;
 }
-
 
 /* Media queries -------------------------------------- */
 @media screen and (min-width: 769px)
