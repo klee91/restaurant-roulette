@@ -9,129 +9,483 @@ var config = {
 
   firebase.initializeApp(config);
    var database = firebase.database();
-   var userRef = firebase.database().ref("user");
-   var email = firebase.database().ref("user/email");
+   var user = firebase.database().ref("user");
+  
    
 
 //objects -------------------------------------------------------
+// Object that stores Ajax search parameter
 var input = {};
+
+// Object that stores email and password
 var subscriber = {};
+
+// array to hold cusine selected by customer
+var cuisineInp = [];
+
+//Array that holds location of user
 var coordinates = 
 {
 	lat: undefined,
 	lng: undefined
 };
 
-//Global variables ----------------------------------------------
-var encodeEmail;
-var added;
+// email that can be stored in Firebase
+var encodedEmail;
 
+// added holds bolean that tells if a customer was added to Firebase
+var added = false;
+
+// exist is a bolean that tells if a customer successfully logged in
+var exist = false;
+// zip that can be used for search after validation
+var zip;
+// object that holds result of Yelp Ajax
+var results;
+// temp var that stores zip for validation
+var tempZip;
+
+// array to house some of the cuisine options at yelp
+var yelpCuisine = ["American New", "American Traditional", "barbeque", 
+"Breakfast & Brunch", "Brazilian", "Buffet", "Burgers", "Cajun", "Creole", 
+"Creperie", "Chicken Wings", "Chinese", "Delis", "Fast Food", 
+"Diner", "French", "German", "Greek", "Indian", "Indonesian", 
+"Irish", "Italian", "Japanese", "Korean", "Mexican", "Pizza", "Sandwiches",
+"Latin American", "Portuguese", "Seafood", "Southern", "Spanish", 
+"Steakhouse", "Sushi", "Thai"];
+
+// bolean to designate addt'l Ajax call with same parameters
+var newRandom = false
 
 // functions ----------------------------------------------------
-function submitRequest(data) {
-	var zip = $("#zipCode").val().trim();
-	// check to make sure a location is received
-	if ( zip = "" & coordinates === undefined) {
-  		console.log("error: zip and coordinates are not defines");
-  	 } else {
-  	 	retrieveData();
-  	 	// placeholders
-  	 	// function yelpAjax();
-		// function couponAjax;
-		// update restaurant on display
-		// function updateRestDisplay();
-		// function updateFirebase();
-	};
 
+// executed when the submit button is pushed
+$( document ).ajaxError(function( event, jqxhr, settings, thrownError ) {
+ console.log(thrownError);
+});
 
+// initiates processing of search when submit clicked
+function submitRequest(){
+  console.log("submit request begin");
+  zip = "";
+  // returns a valid zip for search based on lng/lat or user input
+  determineZip();
 };
 
-function retrieveData(){
-  input = {
-	zip: $("#zipCode").val().trim(),
-	radius: $("#radiusBtn").data("value"),
-	rating: $("#ratingBtn").data("value"),
-	price: $("#priceBtn").data("value")
+// executed after a successful zip code is found 
+function processRequest(){
+  console.log("back from determine zip" + zip);
+  // determine a cuisine for the search
+  // if the user enter a cuisine, pick a random cuisine
+  if (cuisineInp.length !== 0){
+      randomCuisine(cuisineInp);        
+      }
+  // if cuisine not input by user, pick one from a list of Yelp choices
+  else  {
+     
+      //   // do not need if yelp can search without it
+      randomCuisine(yelpCuisine);
+  };
+
+  // check if user clicked new random search
+  // if they did not, this is a new search  
+  if (!newRandom) {
+  // read the rest of variables from the screen
+  retrieveData();
+  } 
+  else {
+    newRandom = false;
+  };
+
+
+  // if the customer logged in, store the search in Firebase
+   if (exist) {
+    storeSearch();
    };
-   console.log(input);
+  // call Yelp ajax
+  ajaxCall();
 };
+     
+
+
+// determine zip to be used for search 
+function determineZip() {
+  //grab zip from the page
+  tempZip = $("#zipCode").val().trim();
+  console.log("determine zip: tempzip: "+tempZip+" zip from page" + $("#zipCode").val().trim());
+  //if a zip was grabbed from the page, use that 
+  if (tempZip !== "") {
+    console.log("zip code entered and being used");
+    // validate the zip grabbed from the page
+    validateZip();   
+  }
+  // if zip wan't grabbed from page, check if location retrieved from user device
+  else if (coordinates.lat !== undefined || coordinates.lng !== undefined) {
+    console.log("geocode zip begin");
+    // translate the coordinates of the device into a zip
+    var geocoder = new google.maps.Geocoder;
+    var latlng = {lat: coordinates.lat, lng: coordinates.lng};
+    geocoder.geocode({'location': latlng}, function(results, status) {
+    // if google maps returns a responce, process it
+      if (status === 'OK') {
+        // if there are valid results in the data, retrieve zip
+        if (results[0]) {
+          zip = results[0].address_components[6].long_name;
+          console.log("geocode zip found");
+          // verify zip code?
+          processRequest();
+        }
+        // if there is not a valid zip returned, show error and return to input page
+        else {
+          $(".modal-title").text("Zip code required:DetermineZip2");
+          $(".modal-body").text("Could not determine current location.  Please enter zip.");
+          //display modal
+          $("#errorModal").modal("show");
+        };
+      }
+      // if google maps did not respond, show error and return to input page
+      else {
+         $(".modal-title").text("Zip code required: determineZip3");
+         $(".modal-body").text("Could not determine current location.  Please enter zip.");
+         //display modal
+         $("#errorModal").modal("show");
+       };
+    });
+  }
+  // neither zip or device coordinates were available so show error
+  // and return to input page
+    else {
+      console.log("error: zip and coordinates are not defined");
+      $(".modal-title").text("Location is required: determineZip");
+      $(".modal-body").text("Please enter a zip code");
+      // display modal
+      $("#errorModal").modal();
+    };
+};
+
+
+// determine if the user entered zip is valid
+function validateZip() {
+      // search zipwise API
+      var key = "n7266066g0eudmth";
+      var queryURL = "https://www.zipwise.com/webservices/zipinfo.php?key=" 
+      + key + "&zip=" + tempzip + "&format=json";
+
+      $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+        .done(function(response) {
+        // when query returned, check object for error or valid data
+          if (response.results.error){
+            // if error return, display error and return to input page
+            $(".modal-title").text(response.results.error);
+            $(".modal-body").text("You must provide a zip code to complete request.");
+           // display modal
+            $("#errorModal").modal("show"); 
+
+            console.log("error: "+response.results.error);
+          }
+          // if error not returned, 
+          // valid address was returned and ok to use
+          else {
+            zip = tempZip;
+            // once valid zip is retrieved, continue processing request
+            processRequest();
+          };
+        });
+};
+
+
+// select a random cuisine from a list of cuisines
+function randomCuisine(food){
+  console.log("randomizing cuisine");
+  var index = Math.floor(Math.random(food.length)*food.length);
+   cuisine = food[index];
+   console.log(cuisine + food[index]);
+};
+
+
+// Retrieve rest of data for search
+function retrieveData(){
+
+  // +++++++++++++++++++++++++NEED TO RETRIEVE CUISINE
+  var radius = $("#radiusBtn").data("value");
+  var rating = $("#ratingBtn").data("value");
+  var price = $("#priceBtn").data("value");
+  // if any of the optional variables were not input,
+  // change setting for Firebase storage
+  if (rating === undefined){
+    rating = "";
+  };
+  if (radius === undefined){
+    radius = "";
+  };
+  if (price === undefined){
+    price = "";
+  };
+  // put all search parameters into object for use
+  input = {
+	cuisine: cuisine,
+  zip: zip,
+	radius: radius,
+	rating: rating,
+	price: price 
+   };
+
+//clear web selectors
+// +++++++++++++++++++++++++++++++++++++++ADDCUISINE 
+  $("#zipCode").val("");
+  $("#radiusBtn").removeData(),
+  $("#ratingBtn").removeData(),
+  $("#priceBtn").removeData()
+   console.log(input + " exist = " + exist);
+
+};
+
+
+
+// store search in firebase
+function storeSearch() {
+  // remove firebase invalid char from email
+  encodeEmail(subscriber.email);
+  console.log(encodedEmail);
+     firebase.database().ref('user/' + encodedEmail + '/search').set(
+    {
+        cuisine: cuisineInp,
+        zip: zip,
+        radius: input.radius,
+        rating: input.rating,
+        price: input.price 
+       });
+    console.log("SEARCH STORED " + input);
+};
+
+
+
 
 // create a user in the database on sign up
 function createUser(){
    console.log("createuser executing");
-   	retrieveUser();
-   	console.log("createuser: back from executing retrieve signin");
-   firebase.auth().createUserWithEmailAndPassword(subscriber.email, subscriber.password).catch(function(error) {
+   console.log("1st: " + $("#signUpPass").val().trim() + "2nd: " + $("#signUpConfirmPass").val().trim() );
+    // if password fields haven't been filled, show error 
+    // and return to page
+   if ($("#signUpPass").val() === '' && $("#signUpConfirmPass").val() === '')
+   { 
+    console.log("passwords blank");
+     //switch content of modal to match error    
+     $(".modal-title").text("Passwords Empty: CreateUser1");
+     $(".modal-body").text("Password and Confirm Password cannot be left blank. Please try again.");
+     //display modal
+     $("#errorModal").modal("show"); 
+     added = false;
+   }
+   //if password and confirmPassword don't match
+   // show error and return to page
+   else if ($("#signUpPass").val() !== $("#signUpConfirmPass").val())
+   {
+    console.log("passwords don't match");
+     //switch content of modal to match error
+     $(".modal-title").text("Password Mismatch: CreateUser2");
+     $(".modal-body").text("Password and Confirm Password do not match. Please try again.");
+     //display modal
+     $("#errorModal").modal("show");
+      added = false;
+    }
+   else
+   { 
+    console.log("passwords match");
+    // passwords match so attempt firebase authorization sign up
+ 	  subscriber = {
+      email: $("#signUpEmail").val(),
+      password: $("#signUpPass").val().trim()
+    };
+     firebase.auth().createUserWithEmailAndPassword(subscriber.email, subscriber.password).catch(function(error) {
+     console.log("createuser: password ok. checking firebase");
 		  // Handle Errors here.
+      // signup was not successful so change added to false
 		   added = false;
 		   console.log(added + " " + error);
+       // display error and return to page
 		   $(".modal-body").empty();
-           var tempDiv = $('<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>');
-           $(".modal-body").append(tempDiv);
-           $(".modal-header").html(error.message);
-           $("#myModal").modal("show");
-           console.log(error);
-		   added = false;
-		   
-  });
+       $(".modal-body").html(error.message);
+       $(".modal-title").html(error.code + " Firebase error - createUser");
+       $("#errorModal").modal("show");
+		  });
+      // if user was added, wipe email from page
+       $("#signUpEmail").val("");
+   };
+      //wipe values in password fields regardless if user added
+     $("#signUpPass").val('');
+     $("#signUpConfirmPass").val('');
+
+
    console.log("firebase auth executed.  added: " + added + "returning");
 };
   
 
 
-function retrieveUser(){
-	subscriber = {
-		email: $("#email").val().trim(),
-		password: $("#password").val().trim()
-	};
-	$("#email").empty();
-	$("password").empty();
-	console.log(subscriber);
+// firebase authorization sign in check
+function checkUserExist() {
+    //grab variables from the screen 
+    subscriber = {
+           email: $("#logInEmail").val().trim(),
+        password: $("#logInPassword").val().trim() 
+      };
+      encodeEmail(subscriber.email);
+     //wipe values in sign up fields
+     $("#logInPassword").val("");
+     $("#logInEmail").val("");
+     // sign in to firebase. 
+      firebase.auth().signInWithEmailAndPassword(subscriber.email, subscriber.password).catch(function(error) {
+         // sign in was not successful so show error
+         // and return to page
+           exist = false;
+           $(".modal-body").empty();
+           // var tempDiv = $('<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>');
+           $(".modal-body").append(error.message);
+           $(".modal-title").html(error.code + " :Firebase error - signin");
+           $("#errorModal").modal("show");
+           console.log(error.code + error.message);
+       });
+
+       console.log("firebase auth executed.  exist: " + exist + "returning");
 };
 
 
-function checkExist(exist){
-    // userRef.once("value")
-        // .then(function(snapshot) {
-           // determine if email exists
-           // console.log(snapshot.val());
-           // {
-           //    userArr =  {  
-           //    user: user,
-           //                 };
-          // });
-     return false;
+function retrieveSearch() {
+  console.log("retrieveSearch Encodedemal " +encodedEmail);
+  var email = firebase.database().ref("user/" + encodedEmail);
+  email.once("value")
+      .then(function(snapshot) {
+          if (snapshot.child("search").exists()){
+            console.log("search param in database")
+            var searchHist = snapshot.val().search;
+           // Object {price: 2, radius: 10, rating: 4, zip: "07922"}
+// searchHist.price
+           }
+           else {
+            console.log("no search param present")
+           };
+        });
 };
 
+
+// when user signs up, add to firebase
 function adduser() {
-  encodeEmail = encodeEmail(subscriber.email);
-  console.log(encodeEmail);
-	  firebase.database().ref('userRef/' + encodeEmail).set(
-	  {
+  encodeEmail(subscriber.email);
+  console.log(encodedEmail);
+	   firebase.database().ref('user/' + encodedEmail).set(
+    {
         password: subscriber.password
        });
 	  console.log("password " + subscriber.password);
 };
 
 
+// replace firebase invalid characters from email for storage
+function encodeEmail(email) {
+  // regex code to search for all "." and resplace with '%2E'
+ encodedEmail = email.toLowerCase();
+ encodedEmail =  encodedEmail.replace(/\./g, '%2E');
 
-function encodeEmail(uri) {
- var newEmail =  encodeURIComponent(uri).replace('.', '%2E');;
- console.log("encodeEmail: " + newEmail);
+ console.log("encodeEmail: " + encodedEmail);
 };
 
-function FormatEmail(eAddress)
-{
-	var userEmail = $.trim(eAddress); //remove leading and trailing spaces
-	return userEmail.replace(/ /g, ''); //remove spaces
-}
-
-function decodeemail(uri) {
-	return decodeURIComponent(uri);
+// return email to original format when retrieve from firebase
+function decodeemail(email) {
+   // regex code to search for all '%2E' and resplace with '.'
+  return email.replace(/\%2E/g, '.');
 };
+
+
+
+// Call yelp ajax 
+function ajaxCall() {
+    $.ajax({
+        url: 'https://floating-peak-76196.herokuapp.com/',
+        type: 'GET',
+        
+        data: {
+          term: input.cuisine,
+          location: input.zip,
+          radius: input.radius,
+          rating: input.rating,
+          price: input.price
+        }
+
+
+    }).done(function(response) {
+      
+        console.log(response);
+
+        
+
+       results = response.businesses;
+
+       results = results.filter(function(elem) {
+           return elem.distance <= $("#radiusBtn").attr("data-value");
+       })
+
+       for (var i = 0; i < results.length; i++) {
+           console.log(results[i]);
+       }
+       // populate results on page
+       populateResult();
+        });
+
+
+};
+
+
+// populate Yelp data on page
+function populateResult(){
+
+ $("#port-img").attr("src", results[0].image_url);
+ $("#port-img").attr("alt", "restaurant photo");
+
+ $("#port-name").text(results[0].name);
+ $("#port-address").text(results[0].location.address1+" " + results[0].location.city);
+
+
+ $("#port-phone").text(results[0].display_phone);//just check append afterwards
+
+ $("#port-direc a").attr("href", results[0].url);
+ $("#port-direc a").text(results[0].url);
+
+ $("#port-rating").text(results[0].rating + " STARS");
+ $("#port-price").text(results[0].price);
+ $("#port-cat").text(results[0].categories[0].title);
+
+};
+
+
+function isNumberKey(evt)
+  {
+     var charCode = (evt.which) ? evt.which : event.keyCode
+     if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+
+     return true;
+  };
+
+
+// reset variables for a brand new search
+function resetVar(){
+  input = {};
+  subscriber = {};
+  cuisineInp = [];
+  zip = "";
+  results = undefined;
+  tempZip = "";
+  newRandom = false;
+  };
+
+
+
 //Run on page load ----------------------------------------------
 
-// grab the users latitude and logitude if permitted
+//grab the users latitude and logitude if permitted
 if (navigator.geolocation)
 {
 	navigator.geolocation.getCurrentPosition(function(position)
@@ -140,13 +494,13 @@ if (navigator.geolocation)
 		coordinates.lat = position.coords.latitude;
 		coordinates.lng = position.coords.longitude;
 
-		//indicate zip code is now optional (assuming user wants to user current coordinates)
-		$("#zipCode").attr("placeholder", "Zip Code (optional)");
-
 		console.log(coordinates.lat);
 		console.log(coordinates.lng);
 	});
-}
+};
+
+
+
 
 //jQuery interactivity -------------------------------------------
 $(document).ready(function() {
@@ -203,10 +557,11 @@ $(document).ready(function() {
 		$('#priceBtn').attr('data-value', $(this).val());
 	});
 
-	//slide parameter section out, when submit button clicked
+	// slide parameter section out, when submit button clicked
   $(document).on('click', '#submitBtn', function(event) {
+      console.log("submit button clicked");
 		  submitRequest();
-        //animation to remove the parameters
+        animation to remove the parameters
         $("#parameters").animate(
         {
             opacity: 0.3,
@@ -217,13 +572,12 @@ $(document).ready(function() {
         	$("#parameters").css("display","none");
         }, 1000);
 
-        //animation for results
-        $("#results").animate(
+        //animation for restaurant profile
+        $("#restaurant-port").animate(
         {
-        	opacity: 1
+        	opacity: 1,
+   			left: "0"
         }, 1000);
-        //ensure results div is involved in flow
-     	$("#results").css("display", "block");
 
         //loading gif animation
         $("#loading").delay(800).animate(
@@ -231,58 +585,42 @@ $(document).ready(function() {
         	opacity: 1
         }, 1000);
 
-        //reveal post results buttons 
-        $("#post-results").css("display", "block");
-        $("#post-results").animate(
-        {
-        	opacity: 1
-        },1000);
     });
+
 
     //click function for New Search
     $(document).on('click', '#new-search' , function(event) {
-
-    	//hide results div and remove from flow
-    	$("#results").animate(
+    	event.preventDefault();
+      resetvar();
+    	//will shift restaurant prof back to the right (or maybe fade in position?)
+    	$("#restaurant-port").animate(
         {
-   			opacity: 0
+   			left: "+=600"
         }, 1000);
-    	setTimeout(function()
-    	{
-    		$("#results").css("display", "none");
-    	}, 1000);
-
     	//will shift params back to screen
     	$("#parameters").css("display","block").animate(
     	{
     		opacity: 1,
     		right: "0"
     	}, 1000);
-
-    	// hide the "post-results" buttons
-    	$("#post-results").animate(
-    	{
-    		opacity: 0
-    	}, 1000);
-    	setTimeout(function()
-    	{
-    		$("#post-results").css("display", "none");
-    	}, 1100);
     });
 
     //click function for New Random
     $(document).on('click', '#new-random' , function(event) {
+    	event.preventDefault();
+      newRandom = true;
+      processRequest();
 
     	//loading will take place
-    	var load = $('<img src="assets/images/loading.gif" alt="loading.gif" id="loading">')
-    	$('#restaurant-port').append(load)
+    	// var load = $('<img src="assets/images/loading.gif" alt="loading.gif" id="loading">')
+    	// $('#restaurant-port').append(load)
     	
     	//will do AJAX call for new random
-    	$.ajax({
-			url: queryURL,
-			method: "GET"
-		}).done(function(response) {
-    	})
+  //   	$.ajax({
+		// 	url: queryURL,
+		// 	method: "GET"
+		// }).done(function(response) {
+  //   	})
     });
 
 
@@ -297,10 +635,8 @@ $(document).ready(function() {
  			//hide log in fields from display
  			$("#logInFields").css("display", "none");
  			//change class to show it's inactive
-
- 			$("#logInBtn").removeClass("activeBtn");
- 			// $("#logInBtn").removeClass("btn-primary");
- 			// $("#logInBtn").addClass("btn-default");
+ 			$("#logInBtn").removeClass("btn-primary");
+ 			$("#logInBtn").addClass("btn-default");
  		}
  		//check if sign up button is not active
  		if ($("#signUpBtn").attr("is-active") === "false")
@@ -310,18 +646,16 @@ $(document).ready(function() {
  			//reveal the sign in fields
  			$("#signUpFields").slideDown(300);
  			//change class of button to show it's active
-
- 			// $("#signUpBtn").removeClass("btn-default");
- 			$("#signUpBtn").addClass("activeBtn");
+ 			$("#signUpBtn").removeClass("btn-default");
+ 			$("#signUpBtn").addClass("btn-primary");
  		}
  		else //if it was active, deactivate it
  		{
  			$("#signUpBtn").attr("is-active", "false")
  			$("#signUpFields").slideUp(300);
  			//change class to show it's inactive
-
- 			$("#signUpBtn").removeClass("activeBtn");
- 			// $("#signUpBtn").addClass("btn-default");
+ 			$("#signUpBtn").removeClass("btn-primary");
+ 			$("#signUpBtn").addClass("btn-default");
  		}
   });
 
@@ -336,9 +670,8 @@ $(document).ready(function() {
   			//hide sign up fields from display
   			$("#signUpFields").css("display", "none");
   			//change class to show it's inactive
-
- 			$("#signUpBtn").removeClass("activeBtn");
- 			// $("#signUpBtn").addClass("btn-default");
+ 			$("#signUpBtn").removeClass("btn-primary");
+ 			$("#signUpBtn").addClass("btn-default");
   		}
   		//check if log in button is not active
   		if ($("#logInBtn").attr("is-active") === "false")
@@ -348,18 +681,16 @@ $(document).ready(function() {
   			//reveal the log in fields
   			$("#logInFields").slideDown(300);
   			//change class of button to show it's active
-
- 			// $("#logInBtn").removeClass("btn-default");
- 			$("#logInBtn").addClass("activeBtn");
+ 			$("#logInBtn").removeClass("btn-default");
+ 			$("#logInBtn").addClass("btn-primary");
   		}
   		else //if it was active, deactivate it
  		{
  			$("#logInBtn").attr("is-active", "false")
  			$("#logInFields").slideUp(300);
  			//change class to show it's inactive
-
- 			$("#logInBtn").removeClass("activeBtn");
- 			// $("#logInBtn").addClass("btn-default");
+ 			$("#logInBtn").removeClass("btn-primary");
+ 			$("#logInBtn").addClass("btn-default");
  		}
   });
 
@@ -376,38 +707,13 @@ $(document).ready(function() {
 //   		{
 // 	  		//if email !exist in database (WRITE THIS CONDITION)
 // 	  		//{
-// 	  			//if password fields haven't been filled
-// 	  			if ($("#signUpPass").val() === '' && $("#signUpConfirmPass").val() === '')
-// 	  			{
-// 	  				//switch content of modal to match error
-// 	  				$(".modal-title").text("Passwords Empty");
-// 	  				$(".modal-body p").text("Password and Confirm Password cannot be left blank. Please try again.");
-// 	  				//display modal
-// 	  				$("#errorModal").modal();
-// 	  			}
-// 	  			//if password and confirmPassword don't match
-// 	  			else if ($("#signUpPass").val() !== $("#signUpConfirmPass").val())
-// 	  			{
-// 	  				//switch content of modal to match error
-// 	  				$(".modal-title").text("Password Mismatch");
-// 	  				$(".modal-body p").text("Password and Confirm Password do not match. Please try again.");
-// 	  				//display modal
-// 	  				$("#errorModal").modal();
-
-// 	  				//wipe values in password fields
-// 	  				$("#signUpPass").val('');
-// 	  				$("#signUpConfirmPass").val('');
-// 	  			}
+// 	  			
 // 	  			else //email not taken, passwords match
 // 	  			{
 // 	  				//sign user up
 // 	  				console.log("sign the user up.");
 
 // 	  				//modal indicating successful sign up
-// 	  				$(".modal-title").text("Success!");
-// 	  				$(".modal-body p").text("Sign Up successful! Click the 'Log In' button to log in!");
-// 	  				//display modal
-// 	  				$("#errorModal").modal();
 
 // 	  				//put email Address into logIn email address field
 // 	  				$("#logInEmail").val($("#signUpEmail").val());
@@ -517,37 +823,42 @@ $(document).ready(function() {
 //   		}
 //   	});
 
-    // click function for signup credentials
-	// $(document).on('click', "#signUpSubmit", function(event) {
- //    createUser();
-	// 	var userEmail = $('#email').val().trim();
-	// 	var userPw = $('#password').val().trim();
 
-    //click function for signup credentials
+  //click function for signup credentials
 	$(document).on('click', '#signUpSubmit', function(event) {
-	   var added = true;
+	   added = true;
 	   createUser();
 	   console.log("added after checking firebase: " + added);
 	    if (added) {
 	    	console.log("user was added");
+       $(".modal-title").text("Success!");
+       $(".modal-body").text("Sign Up successful! Click the 'Log In' button to log in!");
+       //display modal
+       $("#errorModal").modal();
 	    	adduser();
-	    };
-		var userEmail = $('#email').val().trim();
-		var userPw = $('#password').val().trim();
-		
+	    };		
 	});
+
 
 	//click function for grabbing login credentials
 	$('#logInSubmit').on('click', function() {
-		var userEmail = $('#email').val().trim();
-		var userPw = $('#password').val().trim();
-		
+    exist = true;
+    checkUserExist();
+      console.log("back from checkuser Encodedemal " +encodedEmail);
+    if (exist) {
+      $(".modal-title").text("Log In Successful");
+      $(".modal-body").text("You've successfully logged in!");
+      // display modal
+      $("#errorModal").modal();
+   console.log("going to retrieveSearch Encodedemal " +encodedEmail);
+      retrieveSearch();
+    }		
 	});
 	
 });
 
 //AJAX
-var queryURL;
+// var queryURL;
 
 // $.ajax({
 // 	url: queryURL,
