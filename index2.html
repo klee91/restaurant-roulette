@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>yelp</title>
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+
+    <script type="text/javascript">
+
+    var cusine = '';
+
+    $.ajax({
+        url: 'https://floating-peak-76196.herokuapp.com/',
+        type: 'GET',
+        
+        data: {
+        	term: 'fish',
+        	location: 'new york'
+        }
+
+
+    }).done(function(response) {
+
+
+       
+
+    	
+        console.log(response);
+
+        
+
+    });
+    </script>
+</body>
+
+</html>
