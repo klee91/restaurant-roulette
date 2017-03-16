@@ -24,7 +24,7 @@
 	<div class="container-fluid" id="wrapper">
 
 		<div  class="row"> <!-- master row -->
-			<div class="col-sm-1" id="paramColumn"> <!-- paramters column -->
+			<div class="col-sm-3" id="paramColumn"> <!-- paramters column -->
 				<!-- start header -->
 				<div class="row">
 					<div class="col-xs-12" id="header">
@@ -139,87 +139,82 @@
 
 				</div> <!-- end top area row -->
 				<!-- end top area -->
-				
-								<!-- start bottom area -->
-								<div class="row">
-									<div class="col-xs-10 col-xs-offset-1" id="bottomDiv">
-										<hr>
-										<!-- Sign-Up Button -->
-										<button class="btn btn-default col-xs-6" type="registry" id="signUpBtn" is-active="false">Sign Up</button>
-										<!-- End Sign-Up Button -->
-										<!-- Log-In Button -->
-										<button class="btn btn-default col-xs-6" type="registry" id="logInBtn" is-active="false">Log In</button>
-										<!-- End Log-In Button -->
 
-										<!-- Start Sign-Up fields -->
-										<div id="signUpFields">
-											<!-- start sign up email field -->
-											<div class="input-group col-xs-12">
-												<input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon2" id="signUpEmail">
-											</div>
-											<!-- end sign up email field -->
-											<!-- start sign up password field -->
-											<div class="input-group col-xs-12">
-												<input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id="signUpPass">
-											</div>
-											<!-- end sign up password field -->
-											<!-- start sign up confirm password field -->
-											<div class="input-group col-xs-12">
-												<input type="password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon2" id="signUpConfirmPass">
-											</div>
-											<!-- end sign up confirm password field -->
-											<!-- start sign up submit button -->
-											<button class="btn btn-default btn-lg btn-block" type="submit" id="signUpSubmit">Submit</button>
-											<!-- end sign up submit button -->
-										</div>
-										<!-- End Sign-Up Fields -->
-										<!-- Start Log-In fields -->
-										<div id="logInFields">
-											<!-- start log in email field -->
-											<div class="input-group col-xs-12">
-												<input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon2" id="logInEmail">
-											</div>
-											<!-- end log in email field -->
-											<!-- start log in password field -->
-											<div class="input-group col-xs-12">
-												<input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id="logInPassword">
-											</div>
-											<!-- end log in password field -->
-											<!-- start log in submit button -->
-											<button class="btn btn-default btn-lg btn-block" type="submit" id="logInSubmit">Submit</button>
-											<!-- end log in submit button -->
-										</div>
-										<!-- End Log-In fields -->
-									</div>
-								</div>
-								<!-- end bottom area -->
-								<!-- Start Modals -->
-								<!-- Start error modal (also used for success) -->
-								<div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
-									<div class="modal-dialog" role="document">
-										<div class="modal-content">
-											<div class="modal-header">
-												<h4 class="modal-title">Title</h4>
-											</div>
-											<div class="modal-body">
-												<p>Description of error.</p>
-											</div>
-											<div class="modal-footer">
-												<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- End error modal -->
-								<!-- End Modals -->
+				<!-- start bottom area -->
+				<div class="row"> <!-- start bottom row -->
+					<div class="col-xs-10 col-xs-offset-1" id="bottomDiv"> <!-- start bottomDiv -->
+						<hr>
+						<!-- start Sign-Up Button -->
+						<button class="btn btn-default col-xs-6" type="registry" id="signUpBtn" is-active="false">Sign Up</button>
+						<!-- end Sign-Up Button -->
+						<!-- start Log-In Button -->
+						<button class="btn btn-default col-xs-6" type="registry" id="logInBtn" is-active="false">Log In</button>
+						<!-- end Log-In Button -->
+						<!-- Start Sign-Up fields -->
+						<div id="signUpFields">
+							<!-- start sign up email field -->
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon2" id="signUpEmail">
+							</div>
+							<!-- end sign up email field -->
+							<!-- start sign up password field -->
+							<div class="input-group col-xs-12">
+								<input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id="signUpPass">
+							</div>
+							<!-- end sign up password field -->
+							<!-- start sign up confirm password field -->
+							<div class="input-group col-xs-12">
+								<input type="password" class="form-control" placeholder="Confirm Password" aria-describedby="basic-addon2" id="signUpConfirmPass">
+							</div>
+							<!-- end sign up confirm password field -->
+							<!-- start sign up submit button -->
+							<button class="btn btn-default btn-lg btn-block" type="submit" id="signUpSubmit">Submit</button>
+							<!-- end sign up submit button -->
+						</div>
+						<!-- End Sign-Up Fields -->
+						<!-- Start Log-In fields -->
+						<div id="logInFields">
+							<!-- start log in email field -->
+							<div class="input-group col-xs-12">
+								<input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon2" id="logInEmail">
+							</div>
+							<!-- end log in email field -->
+							<!-- start log in password field -->
+							<div class="input-group col-xs-12">
+								<input type="password" class="form-control" placeholder="Password" aria-describedby="basic-addon2" id="logInPassword">
+							</div>
+							<!-- end log in password field -->
+							<!-- start log in submit button -->
+							<button class="btn btn-default btn-lg btn-block" type="submit" id="logInSubmit">Submit</button>
+							<!-- end log in submit button -->
+						</div>
+						<!-- End Log-In fields -->
+					</div> <!-- end bottomDiv -->
+				</div> <!-- end bottom row -->
+				<!-- end bottom area -->
+				<!-- Start error modal (also used for success) -->
+				<!-- <div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
+					<div class="modal-dialog" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title">Title</h4>
+							</div>
+							<div class="modal-body">
+								<p>Description of error.</p>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+					</div>
+				</div> -->
+				<!-- End error modal -->
 			</div> <!-- end parameters column -->
 		</div> <!-- end master row -->
 	</div> <!-- end wrapper -->
 		<footer class="footer text-center col-xs-12" id="footer">
-				<h6>© Copyright 2017</h6>
+			<h6>© Copyright 2017</h6>
 		</footer>
-		<!-- #footer --> 
-
 	<!-- link to app.js -->
 	<script rel="javascript" type="text/javascript" src="assets/javascript/app.js"></script>
 </body>
