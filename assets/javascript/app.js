@@ -166,7 +166,29 @@ $(document).ready(function() {
 	//click function for radius selection
 	$('#radiusDrop li').on('click', function() {
 		$('#radiusBtn').html($(this).val() + " miles ");
-		$('#radiusBtn').attr('data-value', $(this).val());
+
+    //convert miles into meters
+    var inMeters;
+    switch ($(this).val())
+    {
+        case 5:
+          inMeters = 8047;
+          break;
+        case 10:
+          inMeters = 16093;
+          break;
+        case 15:
+          inMeters = 24140;
+          break;
+        case 20:
+          inMeters = 32186;
+          break;
+        default:
+          inMeters = 0; //shouldn't be able to reach here.
+          break;
+    }
+
+		$('#radiusBtn').attr('data-value', inMeters);
 	});
 
 	//click function for rating selection
