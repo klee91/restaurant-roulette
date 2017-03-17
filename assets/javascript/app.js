@@ -173,29 +173,30 @@ function validateZip() {
       var queryURL = "https://www.zipwise.com/webservices/zipinfo.php?key=" 
       + key + "&zip=" + tempZip + "&format=json";
 
-      $.ajax({
-          url: queryURL,
-          method: "GET"
-        })
-        .done(function(response) {
-        // when query returned, check object for error or valid data
-          if (response.results.error){
-            // if error return, display error and return to input page
-            $(".modal-title").text(response.results.error);
-            $(".modal-body").text("You must provide a zip code to complete request.");
-           // display modal
-            $("#errorModal").modal("show"); 
+      //TEMPORARY - disable zipCode verification since we passed allowed limit
+      // $.ajax({ 
+      //     url: queryURL,
+      //     method: "GET"
+      //   })
+      //   .done(function(response) {
+      //   // when query returned, check object for error or valid data
+      //     if (response.results.error){
+      //       // if error return, display error and return to input page
+      //       $(".modal-title").text(response.results.error);
+      //       $(".modal-body").text("You must provide a zip code to complete request.");
+      //      // display modal
+      //       $("#errorModal").modal("show"); 
 
-            console.log("error: "+response.results.error);
-          }
-          // if error not returned, 
-          // valid address was returned and ok to use
-          else {
+      //       console.log("error: "+response.results.error);
+      //     }
+      //     // if error not returned, 
+      //     // valid address was returned and ok to use
+      //     else {
             zip = tempZip;
             // once valid zip is retrieved, continue processing request
             processRequest();
-          };
-        });
+      //    };
+   //     });
 };
 
 
