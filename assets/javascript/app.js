@@ -169,7 +169,7 @@ function validateZip() {
       // search zipwise API
       var key = "n7266066g0eudmth";
       var queryURL = "https://www.zipwise.com/webservices/zipinfo.php?key=" 
-      + key + "&zip=" + tempzip + "&format=json";
+      + key + "&zip=" + tempZip + "&format=json";
 
       $.ajax({
           url: queryURL,
