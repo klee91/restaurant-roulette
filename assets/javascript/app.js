@@ -52,7 +52,7 @@ var exist = false;
 // zip that can be used for search after validation
 var zip;
 // object that holds result of Yelp Ajax
-var results;
+var results = {};
 // temp var that stores zip for validation
 var tempZip;
 
@@ -76,23 +76,22 @@ function submitRequest(){
 
 // executed after a successful zip code is found 
 function processRequest(){
+  // prepare page for display
   prepPage();
   console.log("back from determine zip" + zip);
   var food = $('#cuisine').val().trim();
 
   console.log(food);
- 
-  console.log(food);
+ ;
   // determine a cuisine for the search
   // if the user enter a cuisine, pick a random cuisine
   if (food.length !== 0){
     console.log("using input");
    food = food.split(",");
       cuisineInp = food;
-      randomCuisine(cuisineInp);        
-      }
-  // if cuisine not input by user, pick one from a list of Yelp choices
-  else  {
+      randomCuisine(cuisineInp);  
+
+      }else  {
      
       //   // do not need if yelp can search without it
       randomCuisine(yelpCuisine);
@@ -411,7 +410,6 @@ function decodeemail(email) {
 
 
 
-// Call yelp ajax 
 function ajaxCall() {
     $.ajax({
         url: 'https://floating-peak-76196.herokuapp.com/',
@@ -436,24 +434,22 @@ function ajaxCall() {
 /*       results = results.filter(function(elem) {
            return elem.distance <= $("#radiusBtn").attr("data-value") && elem.rating ==;
        })
-
        for (var i = 0; i < results.length; i++) {
            console.log(results[i]);
        }*/
-
-       var restIndex = Math.floor(Math.random(results.length)*results.length);
        // populate results on page
        populateResult();
        //make result visible now that it's populated
        $("#results").animate(
         {
-        	opacity: 1,
+          opacity: 1,
         }, 1000);
 
         });
 
 
 };
+
 
 // populate Yelp data on page
 function populateResult(){
@@ -491,6 +487,8 @@ function populateResult(){
  $("#port-price2").text(results[0].price);
  $("#port-cat2").text(results[0].categories[0].title);
 };
+
+
 
 
 function isNumberKey(evt)
@@ -601,6 +599,108 @@ function prepPage(){
 
 
 
+function prepPage(){
+
+    SlideParameters();
+
+        //dynamically creates restaurant profile div
+        // mobileAppend();
+        webAppend();
+
+        // animation for restaurant profile
+        $("#restaurant-port2").animate(
+        {
+          opacity: 1,
+          left: "0"
+        }, 1000);
+
+        $("#results").animate(
+        {
+          opacity: 1,
+        }, 1000);
+        setTimeout(function()
+        {
+          $("#results").css("display", "block");
+        }, 1000);
+
+        //animation for post result buttons
+        $("#post-results").css("display","block").animate(
+        {
+          opacity: 1,
+        }, 1000);
+
+        //loading gif animation
+        $("#loading").delay(800).animate(
+        {
+          opacity: 1
+        }, 1000);
+
+    };
+
+  function SlideParameters()
+  {
+      //slide parameters out if on a mobile device
+        if(window.innerWidth <= 768) {
+          $("#parameters").animate(
+          {
+              opacity: 0.3,
+              right: "+=600",
+          }, 1000);
+        } else {
+          $("#parameters").stop();
+        }
+
+        setTimeout( function(){
+          $("#parameters").css("display","none");
+        }, 1000);
+  }
+
+//function for appending the restaurant profile div to the DOM (function for mobile, function for web)
+//functions are called upon clicking submit button (check line 649)
+  // function mobileAppend() {
+  //   //mobile appending
+  //       var div1 = $('<div>')
+  //       div1.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port1")
+  //       var loadGif1 = $('<img>')
+  //       loadGif1.attr('src',"assets/images/loading.gif")
+  //       .attr('alt',"alt")
+  //       .attr('id',"loading1")
+  //       .appendTo(div1)
+  //       var results1 = $('<div>')
+  //       results1.html(
+  //       '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
+  //       div1.append(results1)
+  //      $('.portdiv').append(div1)
+
+  //      //loading gif animation
+  //       $("#loading1").delay(800).animate(
+  //       {
+  //         opacity: 1
+  //       }, 1000);
+  // }
+  //web appending
+  function webAppend() {
+    $('#rest-portWeb').empty(); 
+    //web appending
+      var div2 = $('<div>')
+        div2.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port2")
+        var loadGif2 = $('<img>')
+        loadGif2.attr('src',"assets/images/loading2.gif")
+        .attr('alt',"alt")
+        .attr('id',"loading2")
+        .appendTo(div2)
+        var results2 = $('<div>')
+        results2.html(
+        '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
+        div2.append(results2)
+        $('#rest-portWeb').append(div2)
+
+                $("#loading2").delay(800).css("z-index","4").animate(
+        {
+          opacity: 1
+
+        }, 1000);
+  }
 //Run on page load ----------------------------------------------
 
 //grab the users latitude and logitude if permitted
@@ -638,6 +738,7 @@ $(document).ready(function() {
 	//click function for radius selection
 	$('#radiusDrop li').on('click', function() {
 		$('#radiusBtn').html($(this).val() + " miles ");
+		$('#radiusBtn').attr('data-value', $(this).val());
 
     //convert miles into meters. yelp API requires radius in meters
     var inMeters;
