@@ -455,6 +455,23 @@ function populateResult(){
  $("#port-rating").text(results[0].rating + " STARS");
  $("#port-price").text(results[0].price);
  $("#port-cat").text(results[0].categories[0].title);
+
+ //for web result
+ $("#port-img2").attr("src", results[0].image_url);
+ $("#port-img2").attr("alt", "restaurant photo");
+
+ $("#port-name2").text(results[0].name);
+ $("#port-address2").text(results[0].location.address1+" " + results[0].location.city);
+
+
+ $("#port-phone2").text(results[0].display_phone);//just check append afterwards
+
+ $("#port-direc2 a").attr("href", results[0].url);
+ $("#port-direc2 a").text("Get Directions");
+
+ $("#port-rating2").text(results[0].rating + " STARS");
+ $("#port-price2").text(results[0].price);
+ $("#port-cat2").text(results[0].categories[0].title);
 };
 
 
@@ -610,7 +627,7 @@ $(document).ready(function() {
         .appendTo(div2)
         var results2 = $('<div>')
         results2.html(
-        '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
+        '<h3 id="port-name2"></h3><p id="port-address2"></p><p id="port-phone2"></p><p id="port-hoo2"></p><p id="port-direc2"><a href="" target="_blank"></a></p><p id="port-rating2"></p><p id="port-price2"></p><p id="port-cat2"></p>')
         div2.append(results2)
         $('#rest-portWeb').append(div2)
 
