@@ -76,10 +76,19 @@ function submitRequest(){
 
 // executed after a successful zip code is found 
 function processRequest(){
+  prepPage();
   console.log("back from determine zip" + zip);
+  var food = $('#cuisine').val().trim();
+
+  console.log(food);
+ 
+  console.log(food);
   // determine a cuisine for the search
   // if the user enter a cuisine, pick a random cuisine
-  if (cuisineInp.length !== 0){
+  if (food.length !== 0){
+    console.log("using input");
+   food = food.split(",");
+      cuisineInp = food;
       randomCuisine(cuisineInp);        
       }
   // if cuisine not input by user, pick one from a list of Yelp choices
@@ -431,6 +440,8 @@ function ajaxCall() {
        for (var i = 0; i < results.length; i++) {
            console.log(results[i]);
        }*/
+
+       var restIndex = Math.floor(Math.random(results.length)*results.length);
        // populate results on page
        populateResult();
        //make result visible now that it's populated
@@ -502,6 +513,73 @@ function resetVar(){
   tempZip = "";
   newRandom = false;
   };
+
+function prepPage(){
+
+    SlideParameters();
+
+        //dynamically creates restaurant profile div
+        // mobileAppend();
+        webAppend();
+
+        // animation for restaurant profile
+        $("#restaurant-port2").animate(
+        {
+          opacity: 1,
+          left: "0"
+        }, 1000);
+
+        //if on a mobile, display the results in mobile layout
+        if (window.innerWidth < 768)
+          $("#results").css("display", "block")
+
+
+        // setTimeout(function()
+        // {
+        //   $("#results").css("display", "block");
+        // }, 1000);
+        // $("#results").animate(
+        // {
+        //  opacity: 1,
+        // }, 1000);
+        
+
+        //animation for post result buttons
+        $("#post-results").css("display","block").animate(
+        {
+          opacity: 1,
+        }, 1000);
+
+        //loading gif animation
+        $("#loading").delay(800).animate(
+        {
+          opacity: 1
+        }, 1000);
+}
+
+   //web appending
+  function webAppend() {
+    $('#rest-portWeb').empty(); 
+    //web appending
+      var div2 = $('<div>')
+        div2.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port2")
+        var loadGif2 = $('<img>')
+        loadGif2.attr('src',"assets/images/loading2.gif")
+        .attr('alt',"alt")
+        .attr('id',"loading2")
+        .appendTo(div2)
+        var results2 = $('<div>')
+        results2.html(
+        '<h3 id="port-name2"></h3><p id="port-address2"></p><p id="port-phone2"></p><p id="port-hoo2"></p><p id="port-direc2"><a href="" target="_blank"></a></p><p id="port-rating2"></p><p id="port-price2"></p><p id="port-cat2"></p>')
+        div2.append(results2)
+        $('#rest-portWeb').append(div2)
+
+                $("#loading2").delay(800).css("z-index","4").animate(
+        {
+          opacity: 1
+
+        }, 1000);
+  }
 
   function SlideParameters()
   {
@@ -621,82 +699,19 @@ $(document).ready(function() {
   //         opacity: 1
   //       }, 1000);
   // }
-  //web appending
-  function webAppend() {
-    $('#rest-portWeb').empty(); 
-    //web appending
-      var div2 = $('<div>')
-        div2.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port2")
-        var loadGif2 = $('<img>')
-        loadGif2.attr('src',"assets/images/loading2.gif")
-        .attr('alt',"alt")
-        .attr('id',"loading2")
-        .appendTo(div2)
-        var results2 = $('<div>')
-        results2.html(
-        '<h3 id="port-name2"></h3><p id="port-address2"></p><p id="port-phone2"></p><p id="port-hoo2"></p><p id="port-direc2"><a href="" target="_blank"></a></p><p id="port-rating2"></p><p id="port-price2"></p><p id="port-cat2"></p>')
-        div2.append(results2)
-        $('#rest-portWeb').append(div2)
-
-                $("#loading2").delay(800).css("z-index","4").animate(
-        {
-          opacity: 1
-
-        }, 1000);
-  }
+ 
 //-------------------------------------------------------------------------------------------------
 	// slide parameter section out, when submit button clicked
   $(document).on('click', '#submitBtn', function(event) {
       console.log("submit button clicked");
 		  setTimeout(submitRequest, 1000);
-
-		SlideParameters();
-
-        //dynamically creates restaurant profile div
-        // mobileAppend();
-        webAppend();
-
-        // animation for restaurant profile
-        $("#restaurant-port2").animate(
-        {
-          opacity: 1,
-          left: "0"
-        }, 1000);
-
-        //if on a mobile, display the results in mobile layout
-        if (window.innerWidth < 768)
-        	$("#results").css("display", "block")
-
-
-        // setTimeout(function()
-        // {
-        //   $("#results").css("display", "block");
-        // }, 1000);
-        // $("#results").animate(
-        // {
-        // 	opacity: 1,
-        // }, 1000);
-        
-
-        //animation for post result buttons
-        $("#post-results").css("display","block").animate(
-        {
-          opacity: 1,
-        }, 1000);
-
-        //loading gif animation
-        $("#loading").delay(800).animate(
-        {
-        	opacity: 1
-        }, 1000);
-
     });
 
 
     //click function for New Search
     $(document).on('click', '#new-search' , function(event) {
     	event.preventDefault();
-      resetvar();
+      resetVar();
     	
       //will fade restaurant prof back
       $("#restaurant-port1").animate(
