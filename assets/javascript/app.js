@@ -74,14 +74,21 @@ function submitRequest(){
 
 // executed after a successful zip code is found 
 function processRequest(){
+  // prepare page for display
+  prepPage();
   console.log("back from determine zip" + zip);
   // determine a cuisine for the search
   // if the user enter a cuisine, pick a random cuisine
-  if (cuisineInp.length !== 0){
+  var food = $("#cuisine").val().trim();if (cuisineInp.length !== 0){
       randomCuisine(cuisineInp);        
       }
   // if cuisine not input by user, pick one from a list of Yelp choices
-  else  {
+   if (food !== undefined &&  food !== "") {
+      cuisineInp = food.split(",");
+      console.log(cuisineInp);
+      randomCuisine(cuisineInp);  
+
+      }else  {
      
       //   // do not need if yelp can search without it
       randomCuisine(yelpCuisine);
@@ -484,6 +491,108 @@ function resetVar(){
 
 
 
+function prepPage(){
+
+    SlideParameters();
+
+        //dynamically creates restaurant profile div
+        // mobileAppend();
+        webAppend();
+
+        // animation for restaurant profile
+        $("#restaurant-port2").animate(
+        {
+          opacity: 1,
+          left: "0"
+        }, 1000);
+
+        $("#results").animate(
+        {
+          opacity: 1,
+        }, 1000);
+        setTimeout(function()
+        {
+          $("#results").css("display", "block");
+        }, 1000);
+
+        //animation for post result buttons
+        $("#post-results").css("display","block").animate(
+        {
+          opacity: 1,
+        }, 1000);
+
+        //loading gif animation
+        $("#loading").delay(800).animate(
+        {
+          opacity: 1
+        }, 1000);
+
+    };
+
+  function SlideParameters()
+  {
+      //slide parameters out if on a mobile device
+        if(window.innerWidth <= 768) {
+          $("#parameters").animate(
+          {
+              opacity: 0.3,
+              right: "+=600",
+          }, 1000);
+        } else {
+          $("#parameters").stop();
+        }
+
+        setTimeout( function(){
+          $("#parameters").css("display","none");
+        }, 1000);
+  }
+
+//function for appending the restaurant profile div to the DOM (function for mobile, function for web)
+//functions are called upon clicking submit button (check line 649)
+  // function mobileAppend() {
+  //   //mobile appending
+  //       var div1 = $('<div>')
+  //       div1.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port1")
+  //       var loadGif1 = $('<img>')
+  //       loadGif1.attr('src',"assets/images/loading.gif")
+  //       .attr('alt',"alt")
+  //       .attr('id',"loading1")
+  //       .appendTo(div1)
+  //       var results1 = $('<div>')
+  //       results1.html(
+  //       '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
+  //       div1.append(results1)
+  //      $('.portdiv').append(div1)
+
+  //      //loading gif animation
+  //       $("#loading1").delay(800).animate(
+  //       {
+  //         opacity: 1
+  //       }, 1000);
+  // }
+  //web appending
+  function webAppend() {
+    $('#rest-portWeb').empty(); 
+    //web appending
+      var div2 = $('<div>')
+        div2.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port2")
+        var loadGif2 = $('<img>')
+        loadGif2.attr('src',"assets/images/loading2.gif")
+        .attr('alt',"alt")
+        .attr('id',"loading2")
+        .appendTo(div2)
+        var results2 = $('<div>')
+        results2.html(
+        '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
+        div2.append(results2)
+        $('#rest-portWeb').append(div2)
+
+                $("#loading2").delay(800).css("z-index","4").animate(
+        {
+          opacity: 1
+
+        }, 1000);
+  }
 //Run on page load ----------------------------------------------
 
 //grab the users latitude and logitude if permitted
@@ -540,29 +649,6 @@ $(document).ready(function() {
   $(document).on('click', '#submitBtn', function(event) {
       console.log("submit button clicked");
 		  submitRequest();
-        // animation to remove the parameters
-        $("#parameters").animate(
-        {
-            opacity: 0.3,
-            right: "+=600",
-        }, 1000);
-
-        setTimeout( function(){
-        	$("#parameters").css("display","none");
-        }, 1000);
-
-        //animation for restaurant profile
-        $("#restaurant-port").animate(
-        {
-        	opacity: 1,
-   			left: "0"
-        }, 1000);
-
-        //loading gif animation
-        $("#loading").delay(800).animate(
-        {
-        	opacity: 1
-        }, 1000);
 
     });
 
@@ -570,7 +656,7 @@ $(document).ready(function() {
     //click function for New Search
     $(document).on('click', '#new-search' , function(event) {
     	event.preventDefault();
-      resetvar();
+      resetVar();
     	//will shift restaurant prof back to the right (or maybe fade in position?)
     	$("#restaurant-port").animate(
         {
