@@ -647,7 +647,7 @@ $(document).ready(function() {
         }, 1000);
 
         //if on a mobile, display the results in mobile layout
-        // if (window.innerWidth < 768)
+        if (window.innerWidth < 768)
         	$("#results").css("display", "block")
 
 
