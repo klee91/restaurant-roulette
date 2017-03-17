@@ -173,29 +173,30 @@ function validateZip() {
       var queryURL = "https://www.zipwise.com/webservices/zipinfo.php?key=" 
       + key + "&zip=" + tempZip + "&format=json";
 
-      $.ajax({
-          url: queryURL,
-          method: "GET"
-        })
-        .done(function(response) {
-        // when query returned, check object for error or valid data
-          if (response.results.error){
-            // if error return, display error and return to input page
-            $(".modal-title").text(response.results.error);
-            $(".modal-body").text("You must provide a zip code to complete request.");
-           // display modal
-            $("#errorModal").modal("show"); 
+      //TEMPORARY - disable zipCode verification since we passed allowed limit
+      // $.ajax({ 
+      //     url: queryURL,
+      //     method: "GET"
+      //   })
+      //   .done(function(response) {
+      //   // when query returned, check object for error or valid data
+      //     if (response.results.error){
+      //       // if error return, display error and return to input page
+      //       $(".modal-title").text(response.results.error);
+      //       $(".modal-body").text("You must provide a zip code to complete request.");
+      //      // display modal
+      //       $("#errorModal").modal("show"); 
 
-            console.log("error: "+response.results.error);
-          }
-          // if error not returned, 
-          // valid address was returned and ok to use
-          else {
+      //       console.log("error: "+response.results.error);
+      //     }
+      //     // if error not returned, 
+      //     // valid address was returned and ok to use
+      //     else {
             zip = tempZip;
             // once valid zip is retrieved, continue processing request
             processRequest();
-          };
-        });
+      //    };
+   //     });
 };
 
 
@@ -443,16 +444,21 @@ function ajaxCall() {
 
         //if returned array is empty return first object
        if (results.length == 0 ){
-        console.log('there are no results to display');
+        console.log('not enough results to display');
         allResults();
 
        }else{
         console.log('populateResult was called')
         populateResult();
-       }
+
+        //make result visible now that it's populated
+          $("#results").animate(
+            {
+              opacity: 1,
+            }, 1000);
+      }
     });
-
-
+    
 };
 
 //populate all results if nothing
@@ -595,6 +601,20 @@ if (navigator.geolocation)
 //jQuery interactivity -------------------------------------------
 $(document).ready(function() {
 
+  //slideshow function
+  var slideshowArray = ["assets/images/stock1.jpg", "assets/images/stock2.jpg", "assets/images/stock3.jpg","assets/images/stock4.jpg", "assets/images/stock5.jpg"];
+  var loop = 0;
+  slideshow();
+
+  function slideshow() {
+      if (loop >= slideshowArray.length) {
+        loop = 0;
+      }
+      $('#webHead').css('background-image','url("' + slideshowArray[loop++] + '")')
+      .hide().fadeIn(1000);
+      setTimeout(slideshow,5000);
+  }
+
 	//prevent default action for all <a> and <button> elements
 	$("a, button").on("click", function(event)
 	{
@@ -713,14 +733,20 @@ $(document).ready(function() {
           left: "0"
         }, 1000);
 
-        $("#results").animate(
-        {
-        	opacity: 1,
-        }, 1000);
-        setTimeout(function()
-        {
-          $("#results").css("display", "block");
-        }, 1000);
+        //if on a mobile, display the results in mobile layout
+        if (window.innerWidth < 768)
+        	$("#results").css("display", "block")
+
+
+        // setTimeout(function()
+        // {
+        //   $("#results").css("display", "block");
+        // }, 1000);
+        // $("#results").animate(
+        // {
+        // 	opacity: 1,
+        // }, 1000);
+        
 
         //animation for post result buttons
         $("#post-results").css("display","block").animate(
