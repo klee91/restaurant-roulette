@@ -432,6 +432,12 @@ function ajaxCall() {
        }*/
        // populate results on page
        populateResult();
+       //make result visible now that it's populated
+       $("#results").animate(
+        {
+        	opacity: 1,
+        }, 1000);
+
         });
 
 
@@ -639,14 +645,20 @@ $(document).ready(function() {
           left: "0"
         }, 1000);
 
-        $("#results").animate(
-        {
-        	opacity: 1,
-        }, 1000);
-        setTimeout(function()
-        {
-          $("#results").css("display", "block");
-        }, 1000);
+        //if on a mobile, display the results in mobile layout
+        // if (window.innerWidth < 768)
+        	$("#results").css("display", "block")
+
+
+        // setTimeout(function()
+        // {
+        //   $("#results").css("display", "block");
+        // }, 1000);
+        // $("#results").animate(
+        // {
+        // 	opacity: 1,
+        // }, 1000);
+        
 
         //animation for post result buttons
         $("#post-results").css("display","block").animate(
