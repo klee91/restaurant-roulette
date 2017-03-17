@@ -465,29 +465,38 @@ function allResults(){
      //display modal
      $("#errorModal").modal("show");
   }else{
-     $('#photoWeb').html("<img src='"+totalResults[0].image_url+"'>");
+    //populate mobile result
      $("#port-img").attr("src", totalResults[0].image_url);
      $("#port-img").attr("alt", "restaurant photo");
-
      $("#port-name").text(totalResults[0].name);
      $("#port-address").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
-
-
      $("#port-phone").text(totalResults[0].display_phone);//just check append afterwards
-
      $("#port-direc a").attr("href", totalResults[0].url);
      $("#port-direc a").text(totalResults[0].url);
-
      $("#port-rating").text(totalResults[0].rating + " STARS");
-     $("#port-price").texttotalRresults[0].price);
+     $("#port-price").text(totalRresults[0].price);
      $("#port-cat").text(totalResults[0].categories[0].title);
+
+     //populate web result
+      $("#port-img2").attr("src", totalResults[0].image_url);
+      $("#port-img2").attr("alt", "restaurant photo");
+      $("#port-name2").text(totalResults[0].name);
+      $("#port-address2").text(results[0].location.address1+" " + totalResults[0].location.city);
+      $("#port-phone2").text(totalResults[0].display_phone);//just check append afterwards
+      $("#port-direc2 a").attr("href", totalResults[0].url);
+      $("#port-direc2 a").text("Get Directions");
+      $("#port-rating2").text(totalResults[0].rating + " STARS");
+      $("#port-price2").text(totalResults[0].price);
+      $("#port-cat2").text(totalResults[0].categories[0].title);
+
+      $('#photoWeb').html("<img src='"+totalResults[0].image_url+"'>");
   }
   
 };
 
 // populate Yelp data on page
 function populateResult(){
-
+ //for mobile result
  $("#port-img").attr("src", results[0].image_url);
  $("#port-img").attr("alt", "restaurant photo");
 
