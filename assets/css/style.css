@@ -230,6 +230,7 @@ h6
 {
 	font-size: 20px;
 	margin: 4px 0px;
+	padding: 10px;
 }
 
 #port-name
@@ -243,11 +244,17 @@ h6
 	word-break: break-all;
 }
 
+#port-direc a
+{
+	line-height: 25px;
+}
+
 #port-details
 {
 	background-color: #fff7f7 !important;
 	border-radius: 4px;
 	padding-left: 5px;
+	overflow: auto;
 }
 
 #port-details, #port-param-results
