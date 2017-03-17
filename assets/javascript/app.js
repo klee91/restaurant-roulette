@@ -595,10 +595,14 @@ $(document).ready(function() {
         }, 1000);
 
         //animation for restaurant profile
-        $("#restaurant-port").animate(
+        $("#results").animate(
         {
         	opacity: 1,
    			left: "0"
+        }, 1000);
+        setTimeout(function()
+        {
+          $("#results").css("display", "block");
         }, 1000);
 
         //loading gif animation

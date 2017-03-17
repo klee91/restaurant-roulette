@@ -181,6 +181,11 @@ h6
 	border-bottom: 2px solid #ba731d;
 }
 
+#port-direc
+{
+	word-break: break-all;
+}
+
 #port-details
 {
 	background-color: #fff7f7 !important;
