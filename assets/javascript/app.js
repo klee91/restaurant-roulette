@@ -1,3 +1,4 @@
+//Firebase setup ------------------------------------------------------
 var config = {
     apiKey: "AIzaSyB2GdNM2sv4c3_biodPrXtZFxhRcEqNFqE",
     authDomain: "restaurant-roulette-dcc68.firebaseapp.com",
@@ -10,25 +11,35 @@ var config = {
   firebase.initializeApp(config);
    var database = firebase.database();
    var user = firebase.database().ref("user");
-  
-   
 
-//objects -------------------------------------------------------
+//Global objects -------------------------------------------------------
 // Object that stores Ajax search parameter
 var input = {};
 
 // Object that stores email and password
 var subscriber = {};
 
-// array to hold cusine selected by customer
-var cuisineInp = [];
-
-//Array that holds location of user
 var coordinates = 
 {
 	lat: undefined,
 	lng: undefined
 };
+
+//Global arrays --------------------------------------------------
+
+// array to hold cusine selected by customer
+var cuisineInp = [];
+
+// array to house some of the cuisine options at yelp
+var yelpCuisine = ["American New", "American Traditional", "barbeque", 
+"Breakfast & Brunch", "Brazilian", "Buffet", "Burgers", "Cajun", "Creole", 
+"Creperie", "Chicken Wings", "Chinese", "Delis", "Fast Food", 
+"Diner", "French", "German", "Greek", "Indian", "Indonesian", 
+"Irish", "Italian", "Japanese", "Korean", "Mexican", "Pizza", "Sandwiches",
+"Latin American", "Portuguese", "Seafood", "Southern", "Spanish", 
+"Steakhouse", "Sushi", "Thai"];
+
+//Global variables -----------------------------------------------
 
 // email that can be stored in Firebase
 var encodedEmail;
@@ -44,15 +55,6 @@ var zip;
 var results;
 // temp var that stores zip for validation
 var tempZip;
-
-// array to house some of the cuisine options at yelp
-var yelpCuisine = ["American New", "American Traditional", "barbeque", 
-"Breakfast & Brunch", "Brazilian", "Buffet", "Burgers", "Cajun", "Creole", 
-"Creperie", "Chicken Wings", "Chinese", "Delis", "Fast Food", 
-"Diner", "French", "German", "Greek", "Indian", "Indonesian", 
-"Irish", "Italian", "Japanese", "Korean", "Mexican", "Pizza", "Sandwiches",
-"Latin American", "Portuguese", "Seafood", "Southern", "Spanish", 
-"Steakhouse", "Sushi", "Thai"];
 
 // bolean to designate addt'l Ajax call with same parameters
 var newRandom = false
@@ -204,7 +206,6 @@ function randomCuisine(food){
    cuisine = food[index];
    console.log(cuisine + food[index]);
 };
-
 
 // Retrieve rest of data for search
 function retrieveData(){
@@ -436,7 +437,6 @@ function ajaxCall() {
 
 };
 
-
 // populate Yelp data on page
 function populateResult(){
 
@@ -455,29 +455,6 @@ function populateResult(){
  $("#port-rating").text(results[0].rating + " STARS");
  $("#port-price").text(results[0].price);
  $("#port-cat").text(results[0].categories[0].title);
-
-};
-
-
-// populate Yelp data on page
-function populateResult(){
-
- $("#port-img").attr("src", results[0].image_url);
- $("#port-img").attr("alt", "restaurant photo");
-
- $("#port-name").text(results[0].name);
- $("#port-address").text(results[0].location.address1+" " + results[0].location.city);
-
-
- $("#port-phone").text(results[0].display_phone);//just check append afterwards
-
- $("#port-direc a").attr("href", results[0].url);
- $("#port-direc a").text(results[0].url);
-
- $("#port-rating").text(results[0].rating + " STARS");
- $("#port-price").text(results[0].price);
- $("#port-cat").text(results[0].categories[0].title);
-
 };
 
 
@@ -501,6 +478,24 @@ function resetVar(){
   tempZip = "";
   newRandom = false;
   };
+
+  function SlideParameters()
+  {
+  		//slide parameters out if on a mobile device
+        if(window.innerWidth <= 768) {
+          $("#parameters").animate(
+          {
+              opacity: 0.3,
+              right: "+=600",
+          }, 1000);
+        } else {
+          $("#parameters").stop();
+        }
+
+        setTimeout( function(){
+        	$("#parameters").css("display","none");
+        }, 1000);
+  }
 
 
 
@@ -542,7 +537,7 @@ $(document).ready(function() {
 	$('#radiusDrop li').on('click', function() {
 		$('#radiusBtn').html($(this).val() + " miles ");
 
-    //convert miles into meters
+    //convert miles into meters. yelp API requires radius in meters
     var inMeters;
     switch ($(this).val())
     {
@@ -581,27 +576,27 @@ $(document).ready(function() {
 //--------------------------------------------------------------------------------------------------------
 //function for appending the restaurant profile div to the DOM (function for mobile, function for web)
 //functions are called upon clicking submit button (check line 649)
-  function mobileAppend() {
-    //mobile appending
-        var div1 = $('<div>')
-        div1.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port1")
-        var loadGif1 = $('<img>')
-        loadGif1.attr('src',"assets/images/loading.gif")
-        .attr('alt',"alt")
-        .attr('id',"loading1")
-        .appendTo(div1)
-        var results1 = $('<div>')
-        results1.html(
-        '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
-        div1.append(results1)
-       $('.portdiv').append(div1)
+  // function mobileAppend() {
+  //   //mobile appending
+  //       var div1 = $('<div>')
+  //       div1.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port1")
+  //       var loadGif1 = $('<img>')
+  //       loadGif1.attr('src',"assets/images/loading.gif")
+  //       .attr('alt',"alt")
+  //       .attr('id',"loading1")
+  //       .appendTo(div1)
+  //       var results1 = $('<div>')
+  //       results1.html(
+  //       '<h3 id="port-name"></h3><p id="port-address"></p><p id="port-phone"></p><p id="port-hoo"></p><p id="port-direc"><a href="" target="_blank">Get Directions/Website</a></p><p id="port-rating"></p><p id="port-price"></p><p id="port-cat"></p>')
+  //       div1.append(results1)
+  //      $('.portdiv').append(div1)
 
-       //loading gif animation
-        $("#loading1").delay(800).animate(
-        {
-          opacity: 1
-        }, 1000);
-  }
+  //      //loading gif animation
+  //       $("#loading1").delay(800).animate(
+  //       {
+  //         opacity: 1
+  //       }, 1000);
+  // }
   //web appending
   function webAppend() {
     $('#rest-portWeb').empty(); 
@@ -631,32 +626,23 @@ $(document).ready(function() {
       console.log("submit button clicked");
 		  setTimeout(submitRequest, 1000);
 
-        //animation to remove the parameters
-        if(window.innerWidth <= 768) {
-          $("#parameters").animate(
-          {
-              opacity: 0.3,
-              right: "+=600",
-          }, 1000);
-        } else {
-          $("#parameters").stop();
-        }
-
-        setTimeout( function(){
-        	$("#parameters").css("display","none");
-        }, 1000);
+		SlideParameters();
 
         //dynamically creates restaurant profile div
-        mobileAppend();
+        // mobileAppend();
         webAppend();
 
-        //animation for restaurant profile
-        $("#restaurant-port1 , #restaurant-port2").animate(
+        // animation for restaurant profile
+        $("#restaurant-port2").animate(
         {
           opacity: 1,
           left: "0"
         }, 1000);
 
+        $("#results").animate(
+        {
+        	opacity: 1,
+        }, 1000);
         setTimeout(function()
         {
           $("#results").css("display", "block");
@@ -790,136 +776,6 @@ $(document).ready(function() {
  			$("#logInBtn").addClass("btn-default");
  		}
   });
-
-  	//logic for user signing up
-//   	$("#signUpSubmit").on("click", function()
-//   	{
-//   		//properly format signUpEmail input
-//   		var userEmail = FormatEmail($("#signUpEmail").val());
-//   		$("#signUpEmail").val(userEmail);
-//   		console.log(userEmail);
-
-//   		//check for errors in fields
-//   		if ($("#signUpEmail").val() !== '')
-//   		{
-// 	  		//if email !exist in database (WRITE THIS CONDITION)
-// 	  		//{
-// 	  			
-// 	  			else //email not taken, passwords match
-// 	  			{
-// 	  				//sign user up
-// 	  				console.log("sign the user up.");
-
-// 	  				//modal indicating successful sign up
-
-// 	  				//put email Address into logIn email address field
-// 	  				$("#logInEmail").val($("#signUpEmail").val());
-
-// 	  				//wipe signUp fields
-// 	  				$("#signUpEmail").val('');
-// 	  				$("#signUpPass").val('');
-// 	  				$("#signUpConfirmPass").val('');
-// 	  			}
-// 	  		// }
-// 	  		// else //email already exsits in database
-// 	  		// {
-// 	  				// //switch content of modal to match error
-// 	  				// $(".modal-title").text("Email Already Exists");
-// 	  				// $(".modal-body p").text("The provided email address is already registered. Please try a different email addresss.");
-// 	  				// //display modal
-// 	  				// $("#errorModal").modal();
-
-// 	  				// //wipe values in email and password fields
-// 	  				// $("#signUpEmail").val('');
-// 	  				// $("#signUpPass").val('');
-// 	  				// $("#signUpConfirmPass").val('');
-// 	  		// }
-// 	  	}
-// 	  	else //email was left blank
-// 	  	{
-// 	  		//switch content of modal to match error
-// 	  		$(".modal-title").text("Invalid email address");
-// 	  		$(".modal-body p").text("Email Address cannot be left blank. Please try again.");
-// 	  		//display modal
-// 	  		$("#errorModal").modal();
-
-// 	  		//wipe password values
-// 	  		$("#signUpPass").val('');
-// 	  		$("#signUpConfirmPass").val('');
-// 	  	}
-//   	});
-
-  	//logic for user logging in
-//   	$("#logInSubmit").on("click", function()
-//   	{
-//   		//properly format logInEmail input
-//   		var userEmail = FormatEmail($("#logInEmail").val());
-//   		$("#logInEmail").val(userEmail);
-//   		console.log(userEmail);
-
-//   		//check for errors in fields
-//   		if ($("#logInEmail").val() !== '')
-//   		{
-//   			if ($("#logInPassword").val() !== '')
-//   			{
-//   				// //if email is registered in database (WRITE THIS CONDITION)
-//   				// {
-// 	  			// 	//if password matches password in database (WRITE THIS CONDITION)
-// 	  			// 	{
-// 	  			// 		//log the user in
-// 	  			// 		//switch content of modal to match error
-// 				  // 		$(".modal-title").text("Log In Successful");
-// 				  // 		$(".modal-body p").text("You've successfully logged in!");
-// 				  // 		//display modal
-// 				  // 		$("#errorModal").modal();
-// 				  // 	}
-// 	  			// 	// else //password did not match
-// 	  			// 	{
-// 		  		// 		//switch content of modal to match error
-// 					 //  	$(".modal-title").text("Incorrect Password");
-// 					 //  	$(".modal-body p").text("Password did not match. Please try again.");
-// 					 //  	//display modal
-// 					 //  	$("#errorModal").modal();
-
-// 					 //  	//wipe password field
-// 					 //  	$("#logInPassword").val('');
-// 	  			// 	}
-//   				// }
-//   				// else //email not registered in database
-//   				// {
-//   				// 	//switch content of modal to match error
-// 			  	// 	$(".modal-title").text("Invalid email address");
-// 			  	// 	$(".modal-body p").text("Provided email address is not registered. Click the 'Sign Up' button to register.");
-// 			  	// 	//display modal
-// 			  	// 	$("#errorModal").modal();
-
-// 			  	// 	//wipe email and password values
-// 			  	// 	$("#logInEmail").val('');
-// 			  	// 	$("#logInPassword").val('');
-//   				// }
-//   			}
-//   			else //password field was left blank
-//   			{
-//   				//switch content of modal to match error
-// 		  		$(".modal-title").text("Invlaid Password");
-// 		  		$(".modal-body p").text("Password cannot be left blank. Please try again.");
-// 		  		//display modal
-// 		  		$("#errorModal").modal();
-//   			}
-//   		}
-//   		else //email address was left blank
-//   		{
-//   			//switch content of modal to match error
-// 	  		$(".modal-title").text("Invalid email address");
-// 	  		$(".modal-body p").text("Email Address cannot be left blank. Please try again.");
-// 	  		//display modal
-// 	  		$("#errorModal").modal();
-
-// 	  		//wipe password value
-// 	  		$("#logInPassword").val('');
-//   		}
-//   	});
-
 
   //click function for signup credentials
 	$(document).on('click', '#signUpSubmit', function(event) {
