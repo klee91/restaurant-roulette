@@ -465,7 +465,22 @@ function allResults(){
      //display modal
      $("#errorModal").modal("show");
   }else{
-    $('#photoWeb').html("<img src='"+totalResults[0].image_url+"'>");
+     $('#photoWeb').html("<img src='"+totalResults[0].image_url+"'>");
+     $("#port-img").attr("src", totalResults[0].image_url);
+     $("#port-img").attr("alt", "restaurant photo");
+
+     $("#port-name").text(totalResults[0].name);
+     $("#port-address").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
+
+
+     $("#port-phone").text(totalResults[0].display_phone);//just check append afterwards
+
+     $("#port-direc a").attr("href", totalResults[0].url);
+     $("#port-direc a").text(totalResults[0].url);
+
+     $("#port-rating").text(totalResults[0].rating + " STARS");
+     $("#port-price").texttotalRresults[0].price);
+     $("#port-cat").text(totalResults[0].categories[0].title);
   }
   
 };
