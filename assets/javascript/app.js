@@ -545,6 +545,20 @@ if (navigator.geolocation)
 //jQuery interactivity -------------------------------------------
 $(document).ready(function() {
 
+  //slideshow function
+  var slideshowArray = ["assets/images/stock1.jpg", "assets/images/stock2.jpg", "assets/images/stock3.jpg","assets/images/stock4.jpg", "assets/images/stock5.jpg"];
+  var loop = 0;
+  slideshow();
+
+  function slideshow() {
+      if (loop >= slideshowArray.length) {
+        loop = 0;
+      }
+      $('#webHead').css('background-image','url("' + slideshowArray[loop++] + '")')
+      .hide().fadeIn(1000);
+      setTimeout(slideshow,5000);
+  }
+
 	//prevent default action for all <a> and <button> elements
 	$("a, button").on("click", function(event)
 	{
