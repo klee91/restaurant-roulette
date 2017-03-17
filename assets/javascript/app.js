@@ -420,16 +420,16 @@ function ajaxCall() {
         console.log(response);
 
         
-
-       results = response.businesses;
+       totalResults = response.businesses;
        
+       results = response.businesses;
+
+
        results = results.filter(function(elem) {
            return elem.distance <= $("#radiusBtn").attr("data-value");
        })
 
-       /* if (input.rating == ''){
-          input.rating == 1; 
-       };*/
+
 
        results = results.filter(function(elem) {
            return elem.rating >= input.rating;
@@ -441,12 +441,33 @@ function ajaxCall() {
            console.log(results[i]);
        }
 
-       
-       // populate results on page
-       populateResult();
-        });
+        //if returned array is empty return first object
+       if (results.length == 0 ){
+        console.log('there are no results to display');
+        allResults();
+
+       }else{
+        console.log('populateResult was called')
+        populateResult();
+       }
+    });
 
 
+};
+
+//populate all results if nothing
+function allResults(){
+  console.log('allResults is being called');
+  console.log(totalResults);
+  if(totalResults.length == 0){
+     $(".modal-title").text("No restaurants found");
+     $(".modal-body").text("Search was too specific. Try changing your search criteria");
+     //display modal
+     $("#errorModal").modal("show");
+  }else{
+    $('#port-name').text(totalResults[0].name);
+  }
+  
 };
 
 // populate Yelp data on page
