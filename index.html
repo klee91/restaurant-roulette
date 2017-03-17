@@ -58,7 +58,7 @@
 						<div class="col-xs-12" id="parameters">
 							<!-- start zip code field -->
 							<div id="zipCodeDiv" class="input-group col-xs-12">
-								<input type="text" class="form-control" placeholder="Zip Code" aria-describedby="basic-addon2" id="zipCode">
+								<input type="text" class="form-control" placeholder="Zip Code" aria-describedby="basic-addon2" id="zipCode" onkeypress="return isNumberKey(event)">
 							</div>
 							<!-- end zip code field -->
 							<!-- start raidus drop down button -->
@@ -246,5 +246,9 @@
 
 	<!-- link to app.js -->
 	<script rel="javascript" type="text/javascript" src="assets/javascript/app.js"></script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGVdT7h44_TQKUtdOLXfUu4R2ZOpp96FA">
+
+	</script> 
 </body>
 </html>
