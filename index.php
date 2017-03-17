@@ -31,6 +31,8 @@ $GRANT_TYPE = "client_credentials";
 // Defaults for our simple example.
 $DEFAULT_TERM = "dinner";
 $DEFAULT_LOCATION = "San Francisco, CA";
+$DEFAULT_RADIUS = "8047"; //HELP
+$DEFAULT_PRICE = "1";
 $SEARCH_LIMIT = 20;
 /**
  * Given a bearer token, send a GET request to the API.
@@ -70,6 +72,7 @@ function obtain_bearer_token() {
         curl_close($curl);
     } catch(Exception $e) {
         trigger_error(sprintf(
+
             'Curl failed with error #%d: %s',
             $e->getCode(), $e->getMessage()),
             E_USER_ERROR);
@@ -94,6 +97,7 @@ function request($bearer_token, $host, $path, $url_params = array()) {
         if (FALSE === $curl)
             throw new Exception('Failed to initialize');
         $url = $host . $path . "?" . http_build_query($url_params);
+        //echo $url;
         curl_setopt_array($curl, array(
             CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,  // Capture response.
@@ -130,12 +134,14 @@ function request($bearer_token, $host, $path, $url_params = array()) {
  * @param    $location    The search location passed to the API 
  * @return   The JSON response from the request 
  */
-function search($bearer_token, $term, $location) {
+function search($bearer_token, $term, $location, $radius, $price) {
     $url_params = array();
     
     $url_params['term'] = $term;
     $url_params['location'] = $location;
     $url_params['limit'] = $GLOBALS['SEARCH_LIMIT'];
+    $url_params['radius'] = $radius; //HELP
+    $url_params['price'] = $price;
     
     return request($bearer_token, $GLOBALS['API_HOST'], $GLOBALS['SEARCH_PATH'], $url_params);
 }
@@ -157,13 +163,17 @@ function get_business($bearer_token, $business_id) {
  * @param    $term        The search term to query
  * @param    $location    The location of the business to query
  */
-function query_api($term, $location) {     
+function query_api($term, $location, $radius, $price) {     
     $bearer_token = obtain_bearer_token();
-    $response = json_decode(search($bearer_token, $term, $location));
+
+    if($rating == null){
+        $response = json_decode(search($bearer_token, $term, $location, $radius, $price));
     
-    $pretty_response = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-    header('Content-Type: application/json');
-    print "$pretty_response\n";
+        $pretty_response = json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        header('Content-Type: application/json');
+        print "$pretty_response\n";
+    }
+    
 
 
    /* $business_id = $response->businesses[0]->id;
@@ -186,15 +196,18 @@ function query_api($term, $location) {
 $longopts  = array(
     "term::",
     "location::",
+    "radius::",
+    "price::",
 );
     
 //$options = getopt("", $longopts);
 
 $term = $_GET['term'] ?: $GLOBALS['DEFAULT_TERM'];
 $location = $_GET['location'] ?: $GLOBALS['DEFAULT_LOCATION'];
+$radius = $_GET['radius'] ?: $GLOBALS['DEFAULT_RADIUS'];
+$price = $_GET['price'] ?: $GLOBALS['DEFAULT_PRICE'];
 
-/*echo $_GET['term'] . "\n";
-echo $_GET['location'] . "\n";*/
 
-query_api($term, $location);
+
+query_api($term, $location, $radius, $price);
 ?>

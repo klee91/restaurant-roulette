@@ -410,7 +410,6 @@ function ajaxCall() {
           term: input.cuisine,
           location: input.zip,
           radius: input.radius,
-          rating: input.rating,
           price: input.price
         }
 
@@ -423,13 +422,13 @@ function ajaxCall() {
 
        results = response.businesses;
 
-       results = results.filter(function(elem) {
-           return elem.distance <= $("#radiusBtn").attr("data-value");
+/*       results = results.filter(function(elem) {
+           return elem.distance <= $("#radiusBtn").attr("data-value") && elem.rating ==;
        })
 
        for (var i = 0; i < results.length; i++) {
            console.log(results[i]);
-       }
+       }*/
        // populate results on page
        populateResult();
         });
