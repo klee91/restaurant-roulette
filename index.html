@@ -11,6 +11,8 @@
 	<link href="https://fonts.googleapis.com/css?family=Bowlby+One|Oswald" rel="stylesheet">
 	<!-- link to style css -->
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+	<!-- link to google fonts -->
+	<link href="https://fonts.googleapis.com/css?family=Carter+One|Changa+One|Josefin+Sans|Oleo+Script|Ranga" rel="stylesheet">
 	<!-- link to jQuery cdn -->
 	<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
 	<!-- link to bootstrap css cdn -->
@@ -109,9 +111,11 @@
 								<!-- end submit button -->
 							</div>
 							<!-- end parameters group -->
+							
+			<!-- COMMENTED RESULTS OUT -->
 							<!-- start results group -->
-							<div id="results" class="col-xs-12 zeroPadSides displayNone">
-								<img id="port-img" class="img-responsive img-rounded" src="http://citispotter.com/wp-content/uploads/2016/11/2-4.jpg">
+							<!-- <div id="results" class="col-xs-12 zeroPadSides displayNone">
+								<img id="port-img" class="img-responsive img-rounded" src="#">
 								<h3 id="port-name" class="text-center">Fish N' Chips</h3>
 								<div id="port-details">
 									<p id="port-address">300 Atrium Lane</p>
@@ -124,8 +128,9 @@
 									<p id="port-price" class="col-xs-4 text-center">$$</p>
 									<p id="port-cat" class="col-xs-4 text-center">Italian</p>
 								</div>
-							</div>
+							</div> -->
 							<!-- end results group -->
+
 							<!-- start post results buttons -->
 							<div class="col-xs-12" id="post-results">
 								<button class="btn btn-default btn-sm col-xs-6 pull-left col-xs-offset-1" type="submit" id="new-search">New Search</button>
@@ -142,7 +147,6 @@
 				<!-- start bottom area -->
 				<div class="row"> <!-- start bottom row -->
 					<div class="col-xs-10 col-xs-offset-1" id="bottomDiv"> <!-- start bottomDiv -->
-						<hr>
 						<!-- start Sign-Up Button -->
 						<button class="btn btn-default col-xs-6" type="registry" id="signUpBtn" is-active="false">Sign Up</button>
 						<!-- end Sign-Up Button -->
@@ -209,6 +213,30 @@
 				</div>
 				<!-- End error modal -->
 			</div> <!-- end parameters column -->
+
+			<!-- start web layout -->
+			<div class="container col-sm-9" id="webContainer">
+				<!-- instructions/ greeting row-->
+				<div class="row weblay" id="webHead">
+					<h2 class="text-center col-sm-12" id="webHeader">Feeling lucky, for some yummy?</h2>
+				</div>
+				<!-- end instructions greeting row -->
+				<div class="row weblay" id="webContent"> <!-- restaurant info and map row -->
+						<div class="col-sm-4 col-sm-offset-1" id="rest-portWeb">
+							<h2>Restaurant Portfolio</h2>
+						</div>
+						<div class="col-sm-4 col-sm-offset-1" id="mapsWeb">
+							<h2>Maps</h2>
+						</div>
+				</div> <!-- end restuarant info and map row -->
+				<div class="row weblay" id="photosWeb">
+					<div class="col-sm-9">
+						<h2>Photos</h2>
+					</div>
+				</div>
+			</div>
+			<!-- end web layout -->
+
 		</div> <!-- end master row -->
 	</div> <!-- end wrapper -->
 		<footer class="footer text-center col-xs-12" id="footer">
