@@ -766,7 +766,7 @@ $(document).ready(function() {
     //click function for New Search
     $(document).on('click', '#new-search' , function(event) {
     	event.preventDefault();
-      resetvar();
+      resetVar();
     	
       //will fade restaurant prof back
       $("#restaurant-port1").animate(
