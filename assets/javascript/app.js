@@ -41,7 +41,7 @@ var exist = false;
 // zip that can be used for search after validation
 var zip;
 // object that holds result of Yelp Ajax
-var results;
+var results = {};
 // temp var that stores zip for validation
 var tempZip;
 
@@ -169,7 +169,7 @@ function validateZip() {
       // search zipwise API
       var key = "n7266066g0eudmth";
       var queryURL = "https://www.zipwise.com/webservices/zipinfo.php?key=" 
-      + key + "&zip=" + tempzip + "&format=json";
+      + key + "&zip=" + tempZip + "&format=json";
 
       $.ajax({
           url: queryURL,
@@ -422,7 +422,7 @@ function ajaxCall() {
         
 
        results = response.businesses;
-
+debugger;
        results = results.filter(function(elem) {
            return elem.distance <= $("#radiusBtn").attr("data-value");
        })
@@ -431,7 +431,8 @@ function ajaxCall() {
            console.log(results[i]);
        }
        // populate results on page
-       populateResult();
+debugger;
+       populateResult(results);
         });
 
 
@@ -439,8 +440,8 @@ function ajaxCall() {
 
 
 // populate Yelp data on page
-function populateResult(){
-
+function populateResult(results){
+debugger;
  $("#port-img").attr("src", results[0].image_url);
  $("#port-img").attr("alt", "restaurant photo");
 
