@@ -33,6 +33,29 @@ To Do list:
 	opacity: 0.5 !important;
 }
 
+#footer 
+{
+	width: 100%;
+	position: relative;
+	border-top: solid 1px black;
+	padding: 10px;
+	top: 20px;
+}
+
+#rest-pic
+{
+	margin: auto;
+	padding: 5px;
+	position: relative;
+	width: 100%;
+}
+
+p 
+{
+	line-height: 6px;
+	font-size: 18px;
+}
+
 .portdiv 
 {
 	position: relative;
@@ -47,13 +70,44 @@ To Do list:
 	z-index: 2;
 }
 
-#loading
+#loading1 , #loading2
 {
 	display: block;
 	margin: auto;
 	opacity: 0;
 }
 
+#restaurant-port1
+{
+	position: absolute;
+	border: solid 1px black;
+	border-radius: 3px;
+	z-index: 1;
+	background-color: #FFF;
+	opacity: 0;
+	height: 350px;
+	display: block;
+	visibility: visible;
+}
+
+#restaurant-port2
+{
+	position: absolute;
+	border: solid 1px black;
+	border-radius: 3px;
+	z-index: 1;
+	background-color: #FFF;
+	opacity: 0;
+	height: 100%;
+	display: none;
+	visibility: hidden;
+}
+
+#new-random 
+{
+	margin: 5px;
+	width: 50%;
+}
 #signUpFields, #logInFields
 {
 	display: none;
@@ -67,38 +121,44 @@ To Do list:
 
 #post-results	/* only appears when a result is shown */
 {
-	display: none;
+	/*display: none;
+	opacity: 0;*/
+	display: block;
 	opacity: 0;
 }
 
 /* Colors and overiding styling -------------------- */
 #paramColumn
 {
-	background-color: #F83000;
-
-}
-
-#paramColumn .row div
-{
-	background-color: #FFB00D;
+	/*background-color: #F83000;*/
+	background-image: url("../images/food.png");
+	background-size: contain;
 }
 
 h1
 {
-	color: #fff7f7 !important;
+	/*color: #fff7f7 !important;
 	font-family: "Bowlby One", cursive !important;
-	letter-spacing: 2px;
+	letter-spacing: 2px;*/
+	color: #FFF !important;
+	font-family: 'Changa One', cursive !important;
+	-moz-text-shadow: 3px 3px 0px #880016;
+	-webkit-text-shadow: 3px 3px 0px #880016;
+	text-shadow: 3px 3px 0px #880016;
 }
 
 #header
 {
-	border-bottom: 4px solid #ba731d;
+	/*border-bottom: 4px solid #ba731d;*/
 	margin-bottom: 30px;
+	background-color: #E53935;
+	height: 100px;
 }
 
-h2
+#header h2
 {
-	color: #2c3008 !important;
+	/*color: #2c3008 !important;*/
+	color: #FFF !important;
 	margin-bottom: 0px !important;
 }
 
@@ -111,25 +171,29 @@ input, button
 	color: #2c3008 !important;
 }
 
+
 #topDiv
 {
-	border: 3px solid #ba731d;
+	/*border: 3px solid #ba731d;*/
+	/*background-color:#FFBF00;*/
 	border-radius: 10px;
+	/*border: solid 2px #ba731d !important;*/
+	/*overflow-y: auto;*/
 }
 
 #bottomDiv
 {
 	margin-top: 15px;
-	margin-bottom: 15px;
-	border: 3px solid #ba731d;
+	/*border: 3px solid #ba731d;*/
 	border-radius: 10px;
+	/*padding-bottom: 10px 10px;*/
+	/*background-color:#FFBF00;*/
+	/*border: solid 2px #ba731d !important;*/
 }
 
-hr
+#bottom-area
 {
-	margin: 10px 0px !important;
-	border: 2px solid #fff7f7 !important;
-	border-radius: 4px;
+	padding-bottom: 40px;
 }
 
 .activeBtn
@@ -148,13 +212,6 @@ button[type="registry"]:hover
 {
 	background-color: #9FBA4B !important;
 	color: #fff7f7 !important;
-}
-
-footer
-{
-	background-color: #FFB00D;
-	border-top: 4px solid #ba731d !important;
-	padding: 10px;
 }
 
 h6
@@ -211,12 +268,165 @@ h6
 	bottom: 8px;
 }
 
-/* Media queries -------------------------------------- */
-@media screen and (min-width: 769px)
+.weblay 
 {
+	height: 250px;
+	margin: 20px;
+	display: none !important;
+	visibility: hidden !important;
+}
+
+.webHead
+{
+	display: none;
+	visibility: hidden;
+}
+
+#webHeader
+{
+	vertical-align: middle;
+	line-height: 200px;
+	display: none;
+	visibility: hidden;
+}
+
+#rest-portWeb
+{
+	border: solid 1px black;
+	height: 100%;
+	display: none;
+	visibility: hidden;
+}
+
+#mapsWeb
+{
+	border: solid 1px black; 
+	height: 100%;
+	display: none;
+	visibility: hidden;
+}
+
+#photosWeb
+{
+	display: none;
+	visibility: hidden;
+}
+
+#webContainer
+{
+	display: none;
+	visibility: hidden;
+}
+/* Media queries -------------------------------------- */
+@media screen and (min-width: 768px)
+{
+
+	#paramColumn
+	{
+		height: 1000px;
+		-moz-box-shadow: 3px 0px 5px #888;
+		-webkit-box-shadow: 3px 0px 5px #888;
+		box-shadow: 3px 0px 5px #888;
+	}
+	
+	#webContainer
+	{
+		display: block;
+		visibility: visible;
+	}
+
+	#new-search
+	{
+		display: none;
+		visibility: hidden;
+	}
+
 	#instructions
 	{
 		display: none;
+	}
+	
+	.weblay 
+	{
+		display: block !important;
+		visibility: visible !important;
+	}
+	
+	#webHead
+	{
+		background-image: url("../images/stock1.jpg");
+		background-size: 100%;
+		width: 100%;
+		height: 400px;
+		opacity: 0.75;
+		display: block;
+		visibility: visible;
+		margin: 0;
+		padding:0;
+	}
+
+	#webHeader
+	{
+		color: #FFF;
+		margin: auto;
+		vertical-align: middle;
+		line-height: 13em;
+		display: block;
+		visibility: visible;
+	}
+
+	#webContent
+	{
+		height: 250px;
+	}
+
+	#rest-portWeb
+	{
+		border: solid 1px black;
+		height: 100%;
+		display: block;
+		visibility: visible;
+	}
+
+	#mapsWeb
+	{
+		border: solid 1px black;
+		height: 100%;
+		display: block;
+		visibility: visible;
+	}
+	
+	#photosWeb
+	{
+		display: block;
+		visibility: visible;
+	}
+
+	#restaurant-port1
+	{
+		display: none;
+		visibility: hidden;
+	}
+
+	#restaurant-port2
+	{
+		display: block;
+		visibility: visible;
+	}
+
+	#footer 
+	{
+		top: 0px;
+	}
+	
+	#parameters
+	{
+		display: block !important;
+	}
+
+	#new-random 
+	{
+		width: 100%;
 	}
 }
 
