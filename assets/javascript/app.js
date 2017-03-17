@@ -465,7 +465,7 @@ function allResults(){
      //display modal
      $("#errorModal").modal("show");
   }else{
-    $('#port-name').text(totalResults[0].name);
+    $('#photoWeb').html("<img src='"+totalResults[0].image_url+"'>");
   }
   
 };
