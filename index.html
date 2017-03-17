@@ -23,101 +23,95 @@
 <body>
 	<div class="container-fluid" id="wrapper">
 		<div  class="row"> <!-- master row -->
-			<div class="col-sm-1" id="paramColumn"> <!-- paramters column -->
-				<!-- instructions -->
+			<div class="col-sm-3" id="paramColumn"> <!-- paramters column -->
+				<!-- start header -->
 				<div class="row">
 					<div class="col-xs-12" id="header">
 						<h1 class="text-center">Restaurant Roulette</h1>
 					</div>
 				</div>
-				<!-- end instructions -->
+				<!-- end header -->
 				<!-- modal divs -->
-			    <div class="modal fade" id="myModal" role="dialog">
-		          <div class="modal-dialog">
-		            <div class="modal-content">
-		              <div class="modal-header">
-		                  <h4 class="modal-title"></h4>
-		              </div>
-		              <div class="modal-body">
-		              </div>
-		            </div>
-		          </div>
-			     </div>
-		      <!-- end modal -->
+				<div class="modal fade" id="myModal" role="dialog">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h4 class="modal-title"></h4>
+							</div>
+							<div class="modal-body">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end modal divs -->
 				<!-- start top area -->
-				<div class="row">
-					<div class="col-xs-10 col-xs-offset-1" id="topDiv">
+				<div class="row"> <!-- start top area row -->
+					<div class="col-xs-10 col-xs-offset-1" id="topDiv"> <!-- start top area column-->
 						<!-- start instructions -->
 						<div id="instructions">
 							<button class="close glyphicon glyphicon-remove"></button>
 							<h2 class="text-center">Decide where to eat without having to choose!</h2>
 						</div>
 						<!-- end instructions -->
-					<div class="portdiv">
-						<!-- start parameters group -->
-						<div class="col-xs-12" id="parameters">
-							<!-- start zip code field -->
-							<div id="zipCodeDiv" class="input-group col-xs-12">
-								<input type="text" class="form-control" placeholder="Zip Code" aria-describedby="basic-addon2" id="zipCode" onkeypress="return isNumberKey(event)">
-							</div>
-							<!-- end zip code field -->
-							<!-- start raidus drop down button -->
-							<div class="btn-group col-xs-12 zeroPadSides">
-								<button class="btn btn-default btn-lg dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="radiusBtn">Radius <span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" id="radiusDrop">
-								  	<li value="5"><a class="text-center" href="#">5</a></li>
-								  	<li value="10"><a class="text-center" href="#">10</a></li>
-								  	<li value="15"><a class="text-center" href="#">15</a></li>
-								  	<li value="20"><a class="text-center" href="#">20</a></li>
-								</ul>
-							</div>
-							<!-- end radius drop down button -->
-							<br>
-							<!-- start rating drop down button -->
-							<div class="btn-group col-xs-12 zeroPadSides">
-								<button class="btn btn-default btn-lg dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="ratingBtn">Rating <span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" id="ratingDrop">
-								  	<li value="1"><a class="text-center" href="#">1</a></li>
-								  	<li value="2"><a class="text-center" href="#">2</a></li>
-								  	<li value="3"><a class="text-center" href="#">3</a></li>
-								  	<li value="4"><a class="text-center" href="#">4</a></li>
-								  	<li value="5"><a class="text-center" href="#">5</a></li>
-								</ul>
-							</div>
-							<!-- end rating drop down button -->
-							<br>
-							<!-- start price drop down button -->
-							<div class="btn-group col-xs-12 zeroPadSides">
-								<button class="btn btn-default btn-lg dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="priceBtn">Price <span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" id="priceDrop">
-								  	<li value="1"><a class="text-center" href="#">$</a></li>
-								  	<li value="2"><a class="text-center" href="#">$$</a></li>
-								  	<li value="3"><a class="text-center" href="#">$$$</a></li>
-								  	<li value="4"><a class="text-center" href="#">$$$$</a></li>
-								</ul>
-							</div>
-							<br> 
-							<!-- end price drop down button -->
-
-							<!-- cuisine input -->
-							<div class="btn-group col-xs-12 zeroPadSides">
-								 <input type="text" class="form-control" placeholder="Cuisine (e.g.Italian, etc.)" aria-describedby="basic-addon2" >
-							</div>
-							<!-- start submit button -->
-							<button class="btn btn-default btn-lg col-xs-12" type="submit" id="submitBtn">Submit</button>
-							<!-- end submit button -->
-						</div>
-						<!-- end parameters group -->
-						<!-- <div id="restaurant-port" class="col-xs-12 col-sm-4 zeroPadSides"> -->
-							<!--loading gif for AJAX request -->
-							<!-- <img src="assets/images/loading.gif" alt="loading.gif" id="loading"> -->
-							<div id="results" class="col-xs-12 zeroPadSides displayNone">
-								<div id="port-img-parent" class="center-block">
-									<img id="port-img" class="img-responsive img-rounded" src="http://citispotter.com/wp-content/uploads/2016/11/2-4.jpg">
+						<!-- start portDiv -->
+						<div class="portdiv">
+							<!-- start parameters group -->
+							<div class="col-xs-12" id="parameters">
+								<!-- start zip code field -->
+								<div id="zipCodeDiv" class="input-group col-xs-12">
+									<input type="text" class="form-control" placeholder="Zip Code" aria-describedby="basic-addon2" id="zipCode">
 								</div>
+								<!-- end zip code field -->
+								<!-- start raidus drop down button -->
+								<div class="btn-group col-xs-12 zeroPadSides">
+									<button class="btn btn-default btn-lg dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="radiusBtn">Radius <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="radiusDrop">
+										<li value="5"><a class="text-center" href="#">5</a></li>
+										<li value="10"><a class="text-center" href="#">10</a></li>
+										<li value="15"><a class="text-center" href="#">15</a></li>
+										<li value="20"><a class="text-center" href="#">20</a></li>
+									</ul>
+								</div>
+								<!-- end radius drop down button -->
+								<!-- start rating drop down button -->
+								<div class="btn-group col-xs-12 zeroPadSides">
+									<button class="btn btn-default btn-lg dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="ratingBtn">Rating <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="ratingDrop">
+									  	<li value="1"><a class="text-center" href="#">1</a></li>
+									  	<li value="2"><a class="text-center" href="#">2</a></li>
+									  	<li value="3"><a class="text-center" href="#">3</a></li>
+									  	<li value="4"><a class="text-center" href="#">4</a></li>
+									  	<li value="5"><a class="text-center" href="#">5</a></li>
+									</ul>
+								</div>
+								<!-- end rating drop down button -->
+								<!-- start price drop down button -->
+								<div class="btn-group col-xs-12 zeroPadSides">
+									<button class="btn btn-default btn-lg dropdown-toggle btn-block" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="priceBtn">Price <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" id="priceDrop">
+									  	<li value="1"><a class="text-center" href="#">$</a></li>
+									  	<li value="2"><a class="text-center" href="#">$$</a></li>
+									  	<li value="3"><a class="text-center" href="#">$$$</a></li>
+									  	<li value="4"><a class="text-center" href="#">$$$$</a></li>
+									</ul>
+								</div>
+								<!-- end price drop down button -->
+								<!-- start cuisine input field -->
+								<div class="btn-group col-xs-12 zeroPadSides">
+									<input type="text" class="form-control" placeholder="Cuisine (e.g.Italian, etc.)" aria-describedby="basic-addon2" id="cuisine">
+								</div>
+								<!-- end cuisine input field -->
+								<!-- start submit button -->
+								<button class="btn btn-default btn-lg col-xs-12" type="submit" id="submitBtn">Submit</button>
+								<!-- end submit button -->
+							</div>
+							<!-- end parameters group -->
+							<!-- start results group -->
+							<div id="results" class="col-xs-12 zeroPadSides displayNone">
+								<img id="port-img" class="img-responsive img-rounded" src="http://citispotter.com/wp-content/uploads/2016/11/2-4.jpg">
 								<h3 id="port-name" class="text-center">Fish N' Chips</h3>
 								<div id="port-details">
 									<p id="port-address">300 Atrium Lane</p>
@@ -131,29 +125,30 @@
 									<p id="port-cat" class="col-xs-4 text-center">Italian</p>
 								</div>
 							</div>
-						<!-- </div> -->
-					</div>
-					<!-- parameter/restuarant portfolio row -->
-						<!-- start post results buttons -->
-						<div class="col-xs-12" id="post-results">
-							<button class="btn btn-default btn-sm col-xs-6 pull-left col-xs-offset-1" type="submit" id="new-search">New Search</button>
-							<button class="btn btn-default btn-sm col-xs-6 pull-right" type="submit" id="new-random">Retry</button>
+							<!-- end results group -->
+							<!-- start post results buttons -->
+							<div class="col-xs-12" id="post-results">
+								<button class="btn btn-default btn-sm col-xs-6 pull-left col-xs-offset-1" type="submit" id="new-search">New Search</button>
+								<button class="btn btn-default btn-sm col-xs-6 pull-right" type="submit" id="new-random">Retry</button>
+							</div>
+							<!-- end post results buttons -->
 						</div>
-						<!-- end post results buttons -->
-					</div>
-				</div>
-				<!-- end top area -->
-				<!-- start bottom area -->
-				<div class="row">
-					<div class="col-xs-10 col-xs-offset-1" id="bottomDiv">
-						<hr>
-						<!-- Sign-Up Button -->
-						<button class="btn btn-default col-xs-6" type="registry" id="signUpBtn" is-active="false">Sign Up</button>
-						<!-- End Sign-Up Button -->
-						<!-- Log-In Button -->
-						<button class="btn btn-default col-xs-6" type="registry" id="logInBtn" is-active="false">Log In</button>
-						<!-- End Log-In Button -->
+						<!-- end portDiv -->				
+					</div> <!-- end top area column -->
 
+				</div> <!-- end top area row -->
+				<!-- end top area -->
+
+				<!-- start bottom area -->
+				<div class="row"> <!-- start bottom row -->
+					<div class="col-xs-10 col-xs-offset-1" id="bottomDiv"> <!-- start bottomDiv -->
+						<hr>
+						<!-- start Sign-Up Button -->
+						<button class="btn btn-default col-xs-6" type="registry" id="signUpBtn" is-active="false">Sign Up</button>
+						<!-- end Sign-Up Button -->
+						<!-- start Log-In Button -->
+						<button class="btn btn-default col-xs-6" type="registry" id="logInBtn" is-active="false">Log In</button>
+						<!-- end Log-In Button -->
 						<!-- Start Sign-Up fields -->
 						<div id="signUpFields">
 							<!-- start sign up email field -->
@@ -193,10 +188,9 @@
 							<!-- end log in submit button -->
 						</div>
 						<!-- End Log-In fields -->
-					</div>
-				</div>
+					</div> <!-- end bottomDiv -->
+				</div> <!-- end bottom row -->
 				<!-- end bottom area -->
-				<!-- Start Modals -->
 				<!-- Start error modal (also used for success) -->
 				<div class="modal fade" tabindex="-1" role="dialog" id="errorModal">
 					<div class="modal-dialog" role="document">
@@ -214,36 +208,12 @@
 					</div>
 				</div>
 				<!-- End error modal -->
-				<!-- End Modals -->
-			</div>
-			<!-- #wrapper -->
 			</div> <!-- end parameters column -->
-			<div class="row"> <!-- instructions/ greeting row-->
-				<div class="col-sm-12">
-					<h2>Hey</h2>
-				</div>
-			</div> <!-- end instructions greeting row -->
-			<div class="row"> <!-- restaurant info and map row -->
-				<div class="col-sm-12">
-					<div class="col-sm-6">
-						<h2>Temp</h2>
-					</div>
-					<div class="col-sm-6">
-						<h2>Temp</h2>
-					</div>
-				</div>
-			</div> <!-- end restuarant info and map row -->
-			<div class="row">
-				<div class="col-sm-12">
-					<h2>jsjfoiasjefiosajetlksajf</h2>
-				</div>
-			</div>
 		</div> <!-- end master row -->
+	</div> <!-- end wrapper -->
 		<footer class="footer text-center col-xs-12" id="footer">
-				<h6>© Copyright 2017</h6>
+			<h6>© Copyright 2017</h6>
 		</footer>
-		<!-- #footer -->
-
 	<!-- link to app.js -->
 	<script rel="javascript" type="text/javascript" src="assets/javascript/app.js"></script>
 	<script async defer

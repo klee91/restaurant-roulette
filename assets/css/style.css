@@ -13,7 +13,7 @@ Fonts:
 	font-family: 'Oswald', sans-serif; 
 
 To Do list:
-	- style restaurant portfolio
+	- web layout 
 
 */
 
@@ -31,15 +31,6 @@ To Do list:
 .close
 {
 	opacity: 0.5 !important;
-}
-
-#footer 
-{
-	width: 100%;
-	position: relative;
-	border-top: solid 1px black;
-	margin-top: 10px;
-	padding: 10px;
 }
 
 .portdiv 
@@ -71,6 +62,7 @@ To Do list:
 #signUpBtn, #logInBtn
 {
 	font-size: 16px;
+	margin-bottom: 10px !important;
 }
 
 #post-results	/* only appears when a result is shown */
@@ -83,6 +75,7 @@ To Do list:
 #paramColumn
 {
 	background-color: #F83000;
+
 }
 
 #paramColumn .row div
@@ -122,15 +115,14 @@ input, button
 {
 	border: 3px solid #ba731d;
 	border-radius: 10px;
-	/*overflow-y: auto;*/
 }
 
 #bottomDiv
 {
 	margin-top: 15px;
+	margin-bottom: 15px;
 	border: 3px solid #ba731d;
 	border-radius: 10px;
-	padding-bottom: 10px 10px;
 }
 
 hr
@@ -162,6 +154,7 @@ footer
 {
 	background-color: #FFB00D;
 	border-top: 4px solid #ba731d !important;
+	padding: 10px;
 }
 
 h6
@@ -209,8 +202,9 @@ h6
 #post-results button
 {
 	font-size: 16px;
+	position: relative;
+	bottom: 8px;
 }
-
 
 /* Media queries -------------------------------------- */
 @media screen and (min-width: 769px)
