@@ -169,7 +169,7 @@ function validateZip() {
       // search zipwise API
       var key = "n7266066g0eudmth";
       var queryURL = "https://www.zipwise.com/webservices/zipinfo.php?key=" 
-      + key + "&zip=" + tempzip + "&format=json";
+      + key + "&zip=" + tempZip + "&format=json";
 
       $.ajax({
           url: queryURL,
@@ -421,14 +421,26 @@ function ajaxCall() {
         
 
        results = response.businesses;
-
-/*       results = results.filter(function(elem) {
-           return elem.distance <= $("#radiusBtn").attr("data-value") && elem.rating ==;
+       
+       results = results.filter(function(elem) {
+           return elem.distance <= $("#radiusBtn").attr("data-value");
        })
+
+       /* if (input.rating == ''){
+          input.rating == 1; 
+       };*/
+
+       results = results.filter(function(elem) {
+           return elem.rating >= input.rating;
+       })
+
+
 
        for (var i = 0; i < results.length; i++) {
            console.log(results[i]);
-       }*/
+       }
+
+       
        // populate results on page
        populateResult();
         });
