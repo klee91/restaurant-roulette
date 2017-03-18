@@ -479,7 +479,7 @@ function ajaxCall() {
 };
 
 //populate all results if nothing
-function allResults(){
+function allResults(index){
   console.log('allResults is being called');
   console.log(totalResults);
 
@@ -490,28 +490,27 @@ function allResults(){
      $("#errorModal").modal("show");
   }else{
     //populate mobile result
-     debugger;
-     $("#port-img").attr("src", totalResults[0].image_url);
+     $("#port-img").attr("src", totalResults[index].image_url);
      $("#port-img").attr("alt", "restaurant photo");
      console.log("2-2");
-     $("#port-name").text(totalResults[0].name);
+     $("#port-name").text(totalResults[index].name);
 console.log("3");
-     $("#port-address").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
+     $("#port-address").text(totalResults[index].location.address1+" " + totalResults[0].location.city);
 console.log("4");
-     $("#port-phone").text(totalResults[0].display_phone);//just check append afterwards
+     $("#port-phone").text(totalResults[index].display_phone);//just check append afterwards
 console.log("5");
-     $("#port-direc a").attr("href", totalResults[0].url);
+     $("#port-direc a").attr("href", totalResults[index].url);
 console.log("6");
-     $("#port-direc a").text(totalResults[0].url);
-     $("#port-rating").text(totalResults[0].rating + " STARS");
-     $("#port-price").text(totalResults[0].price);
-     $("#port-cat").text(totalResults[0].categories[0].title);
+     $("#port-direc a").text(totalResults[index].url);
+     $("#port-rating").text(totalResults[index].rating + " STARS");
+     $("#port-price").text(totalResults[index].price);
+     $("#port-cat").text(totalResults[index].categories[index].title);
 
      //populate web result
-      $("#port-img2").attr("src", totalResults[0].image_url);
+      $("#port-img2").attr("src", totalResults[index].image_url);
       $("#port-img2").attr("alt", "restaurant photo");
-      $("#port-name2").text(totalResults[0].name);
-      $("#port-address2").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
+      $("#port-name2").text(totalResults[index].name);
+      $("#port-address2").text(totalResults[index].location.address1+" " + totalResults[0].location.city);
  
       $("#port-phone2").text(totalResults[0].display_phone);//just check append afterwards
       $("#port-direc2 a").attr("href", totalResults[0].url);
@@ -530,21 +529,22 @@ console.log("6");
 function populateResult(index){
  //for mobile result
  
- $("#port-img").attr("src", results[index].image_url);
+ $("#port-img").attr("src", results[0].image_url);
  $("#port-img").attr("alt", "restaurant photo");
 
  $("#port-name").text(results[0].name);
  $("#port-address").text(results[0].location.address1+" " + results[0].location.city);
 
-console.log("3");
+
  $("#port-phone").text(results[0].display_phone);//just check append afterwards
-console.log("4");
+
  $("#port-direc a").attr("href", results[0].url);
  $("#port-direc a").text(results[0].url);
-console.log("5");
+
  $("#port-rating").text(results[0].rating + " STARS");
  $("#port-price").text(results[0].price);
  $("#port-cat").text(results[0].categories[0].title);
+
 
  //for web result
  $("#port-img2").attr("src", results[0].image_url);
@@ -890,7 +890,32 @@ $(document).ready(function() {
   //         opacity: 1
   //       }, 1000);
   // }
- 
+
+  //web appending
+  function webAppend() {
+    $('#rest-portWeb').empty(); 
+    //web appending
+      var div2 = $('<div>')
+        div2.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port2")
+        // var loadGif2 = $('<img>')
+        // loadGif2.attr('src',"assets/images/loading2.gif")
+        // .attr('alt',"alt")
+        // .attr('id',"loading2")
+        // .appendTo(div2)
+        var results2 = $('<div>')
+        var image = $('<div>')
+        image.html('<img id="port-img2" class="img-responsive img-rounded" src="">').appendTo(div2);
+        results2.attr('id','rest-info').html(
+        '<h3 id="port-name2"></h3><p id="port-address2"></p><p id="port-phone2"></p><p id="port-hoo2"></p><p id="port-direc2"><a href="" target="_blank"></a></p><p id="port-rating2"></p><p id="port-price2"></p><p id="port-cat2"></p>')
+        div2.append(results2)
+        $('#rest-portWeb').append(div2)
+
+                $("#loading2").delay(800).css("z-index","4").animate(
+        {
+          opacity: 1
+
+        }, 1000);
+  }
 //-------------------------------------------------------------------------------------------------
 	// slide parameter section out, when submit button clicked
   $(document).on('click', '#submitBtn', function(event) {
