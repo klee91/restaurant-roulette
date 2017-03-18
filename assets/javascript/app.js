@@ -79,7 +79,10 @@ function processRequest(){
   console.log("back from determine zip" + zip);
   // determine a cuisine for the search
   // if the user enter a cuisine, pick a random cuisine
-  if (cuisineInp.length !== 0){
+  var cuisineTemp = ($(cuisine).val().trim());
+ 
+  if (cuisineTemp.length !== 0){
+     cuisineInp = cuisineTemp.split(",");
       randomCuisine(cuisineInp);        
       }
   // if cuisine not input by user, pick one from a list of Yelp choices
