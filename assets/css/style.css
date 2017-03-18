@@ -40,6 +40,7 @@ To Do list:
 	border-top: solid 1px black;
 	padding: 10px;
 	top: 20px;
+	background-color: #E53935;
 }
 
 #rest-pic
@@ -213,7 +214,8 @@ button[type="registry"]:hover
 
 h6
 {
-	color: #ba731d !important;
+	/*color: #ba731d !important;*/
+	color: #FFF !important;
 	font-size: 14px !important;
 }
 
@@ -231,13 +233,13 @@ h6
 	line-height: 22px;
 }
 
-#port-name
+#port-name, #port-name2
 {
 	padding: 2px;
 	border-bottom: 2px solid #ba731d;
 }
 
-#port-direc
+#port-direc, #port-direc2
 {
 	word-break: break-all;
 }
@@ -255,7 +257,7 @@ h6
 	overflow: auto;
 }
 
-#port-details, #port-param-results
+#port-details, #port-param-results, #restaurant-port2
 {
 	font-family: "Oswald", sans-serif;
 }
@@ -336,6 +338,7 @@ h6
 	
 	#webContainer
 	{
+		padding:0;
 		display: block;
 		visibility: visible;
 	}
@@ -375,9 +378,13 @@ h6
 		color: #FFF;
 		margin: auto;
 		vertical-align: middle;
-		line-height: 13em;
+		padding-top: 200px;
+		line-height: 0px;
 		display: block;
 		visibility: visible;
+		font-size: 40px;
+		text-shadow: 5px 0px 5px #222222;
+		font-family: 'Baloo Bhaina', cursive;
 	}
 
 	#webContent

@@ -428,15 +428,17 @@ function ajaxCall() {
         console.log(response);
 
         
-
+       totalResults = response.businesses;
+       
        results = response.businesses;
 
-/*       results = results.filter(function(elem) {
-           return elem.distance <= $("#radiusBtn").attr("data-value") && elem.rating ==;
+
+       results = results.filter(function(elem) {
+           return elem.distance <= $("#radiusBtn").attr("data-value");
        })
        for (var i = 0; i < results.length; i++) {
            console.log(results[i]);
-       }*/
+       }
        // populate results on page
        populateResult();
        //make result visible now that it's populated
@@ -445,15 +447,79 @@ function ajaxCall() {
           opacity: 1,
         }, 1000);
 
-        });
+
+       results = results.filter(function(elem) {
+           return elem.rating >= input.rating;
+       })
 
 
+
+       for (var i = 0; i < results.length; i++) {
+           console.log(results[i]);
+       }
+
+        //if returned array is empty return first object
+       if (results.length == 0 ){
+        console.log('not enough results to display');
+        allResults();
+
+       }else{
+        console.log('populateResult was called')
+        populateResult();
+
+        //make result visible now that it's populated
+          $("#results").animate(
+            {
+              opacity: 1,
+            }, 1000);
+      }
+    });
+    
+};
+
+//populate all results if nothing
+function allResults(){
+  console.log('allResults is being called');
+  console.log(totalResults);
+  if(totalResults.length == 0){
+     $(".modal-title").text("No restaurants found");
+     $(".modal-body").text("Search was too specific. Try changing your search criteria");
+     //display modal
+     $("#errorModal").modal("show");
+  }else{
+    //populate mobile result
+     $("#port-img").attr("src", totalResults[0].image_url);
+     $("#port-img").attr("alt", "restaurant photo");
+     $("#port-name").text(totalResults[0].name);
+     $("#port-address").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
+     $("#port-phone").text(totalResults[0].display_phone);//just check append afterwards
+     $("#port-direc a").attr("href", totalResults[0].url);
+     $("#port-direc a").text(totalResults[0].url);
+     $("#port-rating").text(totalResults[0].rating + " STARS");
+     $("#port-price").text(totalRresults[0].price);
+     $("#port-cat").text(totalResults[0].categories[0].title);
+
+     //populate web result
+      $("#port-img2").attr("src", totalResults[0].image_url);
+      $("#port-img2").attr("alt", "restaurant photo");
+      $("#port-name2").text(totalResults[0].name);
+      $("#port-address2").text(results[0].location.address1+" " + totalResults[0].location.city);
+      $("#port-phone2").text(totalResults[0].display_phone);//just check append afterwards
+      $("#port-direc2 a").attr("href", totalResults[0].url);
+      $("#port-direc2 a").text("Get Directions");
+      $("#port-rating2").text(totalResults[0].rating + " STARS");
+      $("#port-price2").text(totalResults[0].price);
+      $("#port-cat2").text(totalResults[0].categories[0].title);
+
+      $('#photoWeb').html("<img src='"+totalResults[0].image_url+"'>");
+  }
+  
 };
 
 
 // populate Yelp data on page
 function populateResult(){
-
+ //for mobile result
  $("#port-img").attr("src", results[0].image_url);
  $("#port-img").attr("alt", "restaurant photo");
 
@@ -722,6 +788,20 @@ if (navigator.geolocation)
 
 //jQuery interactivity -------------------------------------------
 $(document).ready(function() {
+
+  //slideshow function
+  var slideshowArray = ["assets/images/stock1.jpg", "assets/images/stock2.jpg", "assets/images/stock3.jpg","assets/images/stock4.jpg", "assets/images/stock5.jpg"];
+  var loop = 0;
+  slideshow();
+
+  function slideshow() {
+      if (loop >= slideshowArray.length) {
+        loop = 0;
+      }
+      $('#webHead').css('background-image','url("' + slideshowArray[loop++] + '")')
+      .hide().fadeIn(1000);
+      setTimeout(slideshow,5000);
+  }
 
 	//prevent default action for all <a> and <button> elements
 	$("a, button").on("click", function(event)
