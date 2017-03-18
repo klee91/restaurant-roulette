@@ -457,7 +457,7 @@ function populateResult(){
  $("#port-phone").text(results[0].display_phone);//just check append afterwards
 
  $("#port-direc a").attr("href", results[0].url);
- $("#port-direc a").text(results[0].url);
+ $("#port-direc a").text("Get Directions");
 
  $("#port-rating").text(results[0].rating + " STARS");
  $("#port-price").text(results[0].price);
@@ -641,13 +641,15 @@ $(document).ready(function() {
     //web appending
       var div2 = $('<div>')
         div2.addClass('col-xs-12 zeroPadSides').attr('id',"restaurant-port2")
-        var loadGif2 = $('<img>')
-        loadGif2.attr('src',"assets/images/loading2.gif")
-        .attr('alt',"alt")
-        .attr('id',"loading2")
-        .appendTo(div2)
+        // var loadGif2 = $('<img>')
+        // loadGif2.attr('src',"assets/images/loading2.gif")
+        // .attr('alt',"alt")
+        // .attr('id',"loading2")
+        // .appendTo(div2)
         var results2 = $('<div>')
-        results2.html(
+        var image = $('<div>')
+        image.html('<img id="port-img2" class="img-responsive img-rounded" src="">').appendTo(div2);
+        results2.attr('id','rest-info').html(
         '<h3 id="port-name2"></h3><p id="port-address2"></p><p id="port-phone2"></p><p id="port-hoo2"></p><p id="port-direc2"><a href="" target="_blank"></a></p><p id="port-rating2"></p><p id="port-price2"></p><p id="port-cat2"></p>')
         div2.append(results2)
         $('#rest-portWeb').append(div2)
