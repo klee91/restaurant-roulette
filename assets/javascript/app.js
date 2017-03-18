@@ -133,9 +133,16 @@ function determineZip() {
         // if there are valid results in the data, retrieve zip
         if (results[0]) {
           zip = results[0].address_components[6].long_name;
-          console.log("geocode zip found");
-          // verify zip code?
-          processRequest();
+          if (zip === "") {
+            $(".modal-title").text("Zip code required:DetermineZip2");
+            $(".modal-body").text("Could not determine current location.  Please enter zip.");
+            //display modal
+            $("#errorModal").modal("show");
+          } else
+          { console.log("geocode zip found");
+            // verify zip code?
+            processRequest();
+          };
         }
         // if there is not a valid zip returned, show error and return to input page
         else {
@@ -174,29 +181,29 @@ function validateZip() {
       + key + "&zip=" + tempZip + "&format=json";
 
       //TEMPORARY - disable zipCode verification since we passed allowed limit
-      // $.ajax({ 
-      //     url: queryURL,
-      //     method: "GET"
-      //   })
-      //   .done(function(response) {
-      //   // when query returned, check object for error or valid data
-      //     if (response.results.error){
-      //       // if error return, display error and return to input page
-      //       $(".modal-title").text(response.results.error);
-      //       $(".modal-body").text("You must provide a zip code to complete request.");
-      //      // display modal
-      //       $("#errorModal").modal("show"); 
+      $.ajax({ 
+          url: queryURL,
+          method: "GET"
+        })
+        .done(function(response) {
+        // when query returned, check object for error or valid data
+          if (response.results.error){
+            // if error return, display error and return to input page
+            $(".modal-title").text(response.results.error);
+            $(".modal-body").text("You must provide a zip code to complete request.");
+           // display modal
+            $("#errorModal").modal("show"); 
 
-      //       console.log("error: "+response.results.error);
-      //     }
-      //     // if error not returned, 
-      //     // valid address was returned and ok to use
-      //     else {
+            console.log("error: "+response.results.error);
+          }
+          // if error not returned, 
+          // valid address was returned and ok to use
+          else {
             zip = tempZip;
             // once valid zip is retrieved, continue processing request
             processRequest();
-      //    };
-   //     });
+         };
+       });
 };
 
 
@@ -218,13 +225,13 @@ function retrieveData(){
   // if any of the optional variables were not input,
   // change setting for Firebase storage
   if (rating === undefined){
-    rating = "";
+    rating = "1";
   };
   if (radius === undefined){
-    radius = "";
+    radius = "32000";
   };
   if (price === undefined){
-    price = "";
+    price = "1";
   };
   // put all search parameters into object for use
   input = {
@@ -472,6 +479,7 @@ function allResults(){
      $("#errorModal").modal("show");
   }else{
     //populate mobile result
+    console.log("populating results");
      $("#port-img").attr("src", totalResults[0].image_url);
      $("#port-img").attr("alt", "restaurant photo");
      $("#port-name").text(totalResults[0].name);
@@ -480,14 +488,14 @@ function allResults(){
      $("#port-direc a").attr("href", totalResults[0].url);
      $("#port-direc a").text(totalResults[0].url);
      $("#port-rating").text(totalResults[0].rating + " STARS");
-     $("#port-price").text(totalRresults[0].price);
+     $("#port-price").text(totalResults[0].price);
      $("#port-cat").text(totalResults[0].categories[0].title);
 
      //populate web result
       $("#port-img2").attr("src", totalResults[0].image_url);
       $("#port-img2").attr("alt", "restaurant photo");
       $("#port-name2").text(totalResults[0].name);
-      $("#port-address2").text(results[0].location.address1+" " + totalResults[0].location.city);
+      $("#port-address2").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
       $("#port-phone2").text(totalResults[0].display_phone);//just check append afterwards
       $("#port-direc2 a").attr("href", totalResults[0].url);
       $("#port-direc2 a").text("Get Directions");
