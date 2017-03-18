@@ -14,9 +14,35 @@ Fonts:
 
 To Do list:
 	- web layout 
-
 */
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
 
+html {
+	height: 100%;
+	box-sizing: border-box;
+}
+
+#footer 
+{
+	width: 100%;
+	border-top: solid 1px black;
+	padding: 10px;
+	right: 0;
+  	bottom: 0;
+  	left: 0;
+	background-color: #E53935;
+}
+
+body
+{
+	height: 100%;
+	
+	background-color: red;
+}
 .zeroPadSides /*used on dropdown buttons in parameters div */
 {
 	padding-left: 0px !important;
@@ -94,8 +120,8 @@ p
 #restaurant-port2
 {
 	position: absolute;
-	border: solid 1px black;
-	border-radius: 3px;
+	bottom: 0;
+	border-radius: 5px;
 	z-index: 1;
 	background-color: #FFF;
 	opacity: 0;
@@ -128,7 +154,6 @@ p
 /* Colors and overiding styling -------------------- */
 #paramColumn
 {
-	/*background-color: #F83000;*/
 	background-image: url("../images/food.png");
 	background-size: contain;
 }
@@ -214,7 +239,6 @@ button[type="registry"]:hover
 
 h6
 {
-	/*color: #ba731d !important;*/
 	color: #FFF !important;
 	font-size: 14px !important;
 }
@@ -299,7 +323,7 @@ h6
 
 #rest-portWeb
 {
-	border: solid 1px black;
+	position: relative;
 	height: 100%;
 	display: none;
 	visibility: hidden;
@@ -307,7 +331,6 @@ h6
 
 #mapsWeb
 {
-	border: solid 1px black; 
 	height: 100%;
 	display: none;
 	visibility: hidden;
@@ -323,6 +346,11 @@ h6
 {
 	display: none;
 	visibility: hidden;
+}
+
+#wrapper 
+{
+	background-color: #F7F9FB;
 }
 /* Media queries -------------------------------------- */
 @media screen and (min-width: 768px)
@@ -341,6 +369,7 @@ h6
 		padding:0;
 		display: block;
 		visibility: visible;
+
 	}
 
 	#new-search
@@ -354,6 +383,13 @@ h6
 		display: none;
 	}
 	
+	#instructionsWeb
+	{
+		display: block;
+		font-family: 'Oswald', cursive !important;
+		padding: 15px;
+	}
+
 	.weblay 
 	{
 		display: block !important;
@@ -363,7 +399,10 @@ h6
 	#webHead
 	{
 		background-image: url("../images/stock1.jpg");
-		background-size: 100%;
+		background-repeat: no-repeat;
+    	background-position: center; 
+		background-size: cover;
+		vertical-align: middle;
 		width: 100%;
 		height: 400px;
 		opacity: 0.75;
@@ -389,23 +428,45 @@ h6
 
 	#webContent
 	{
-		height: 250px;
+		height: 400px;
 	}
 
 	#rest-portWeb
 	{
-		border: solid 1px black;
+		padding: 10px;
+		margin-left: 5%;
+		margin-right: 5%;
 		height: 100%;
 		display: block;
 		visibility: visible;
+		background-color: #AAAFA8;
+		border-radius: 5px;
+	}
+	
+	#port-img2
+	{
+		width: 60%;
+		max-height: 150px;
+		margin: auto;
+		margin-top: 10px;
+	}
+	
+	#rest-info
+	{
+		background-color: #FFF;
+		height: 40%;
+		margin: 7px;
 	}
 
 	#mapsWeb
 	{
-		border: solid 1px black;
+		padding: 10px;
+		margin-left: 5%;
 		height: 100%;
 		display: block;
 		visibility: visible;
+		background-color: #AAAFA8;
+		border-radius: 5px;
 	}
 	
 	#photosWeb
@@ -414,16 +475,12 @@ h6
 		visibility: visible;
 	}
 
-	#restaurant-port1
-	{
-		display: none;
-		visibility: hidden;
-	}
-
 	#restaurant-port2
 	{
 		display: block;
 		visibility: visible;
+		background-image: url("../images/food.png");
+		background-size: contain;
 	}
 
 	#footer 
