@@ -410,6 +410,7 @@ function decodeemail(email) {
 
 
 
+// Call yelp ajax 
 function ajaxCall() {
     $.ajax({
         url: 'https://floating-peak-76196.herokuapp.com/',
@@ -436,16 +437,7 @@ function ajaxCall() {
        results = results.filter(function(elem) {
            return elem.distance <= $("#radiusBtn").attr("data-value");
        })
-       for (var i = 0; i < results.length; i++) {
-           console.log(results[i]);
-       }
-       // populate results on page
-       populateResult();
-       //make result visible now that it's populated
-       $("#results").animate(
-        {
-          opacity: 1,
-        }, 1000);
+
 
 
        results = results.filter(function(elem) {
@@ -496,7 +488,7 @@ function allResults(){
      $("#port-direc a").attr("href", totalResults[0].url);
      $("#port-direc a").text(totalResults[0].url);
      $("#port-rating").text(totalResults[0].rating + " STARS");
-     $("#port-price").text(totalRresults[0].price);
+     $("#port-price").text(totalResults[0].price);
      $("#port-cat").text(totalResults[0].categories[0].title);
 
      //populate web result
