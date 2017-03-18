@@ -125,6 +125,7 @@ function determineZip() {
   console.log("determine zip: tempzip: "+tempZip+" zip from page" + $("#zipCode").val().trim());
   //if a zip was grabbed from the page, use that 
   if (tempZip !== "") {
+
     console.log("zip code entered and being used");
     // validate the zip grabbed from the page
     validateZip();   
@@ -139,12 +140,22 @@ function determineZip() {
     // if google maps returns a responce, process it
       if (status === 'OK') {
         // if there are valid results in the data, retrieve zip
-        if (results[0]) {
-          zip = results[0].address_components[6].long_name;
-          console.log("geocode zip found");
+        if (results[0]) { 
+          tempZip = results[0].address_components[6].long_name;
+          if (tempZip ==="") {
+            $(".modal-title").text("Zip code required:DetermineZip2");
+            $(".modal-body").text("Could not determine current location.  Please enter zip.");
+            //display modal
+            $("#errorModal").modal("show");
+
+          } else
+          {
+          console.log("geocode zip found"+ zip);
           // verify zip code?
-          processRequest();
+          validateZip();
+          };
         }
+
         // if there is not a valid zip returned, show error and return to input page
         else {
           $(".modal-title").text("Zip code required:DetermineZip2");
@@ -226,14 +237,15 @@ function retrieveData(){
   // if any of the optional variables were not input,
   // change setting for Firebase storage
   if (rating === undefined){
-    rating = "";
+    rating = "1";
   };
   if (radius === undefined){
-    radius = "";
+    radius = "32200";
   };
   if (price === undefined){
-    price = "";
+    price = "1";
   };
+
   // put all search parameters into object for use
   input = {
 	cuisine: cuisine,
@@ -430,34 +442,31 @@ function ajaxCall() {
 
         
        totalResults = response.businesses;
-       
+    
        results = response.businesses;
-
 
        results = results.filter(function(elem) {
            return elem.distance <= $("#radiusBtn").attr("data-value");
        })
-
-
 
        results = results.filter(function(elem) {
            return elem.rating >= input.rating;
        })
 
 
-
        for (var i = 0; i < results.length; i++) {
            console.log(results[i]);
        }
+       var index = Math.floor(Math.random(results.length)*results.length);       
 
         //if returned array is empty return first object
        if (results.length == 0 ){
         console.log('not enough results to display');
-        allResults();
+        allResults(index);
 
        }else{
         console.log('populateResult was called')
-        populateResult();
+        populateResult(index);
 
         //make result visible now that it's populated
           $("#results").animate(
@@ -473,6 +482,7 @@ function ajaxCall() {
 function allResults(){
   console.log('allResults is being called');
   console.log(totalResults);
+
   if(totalResults.length == 0){
      $(".modal-title").text("No restaurants found");
      $(".modal-body").text("Search was too specific. Try changing your search criteria");
@@ -480,12 +490,18 @@ function allResults(){
      $("#errorModal").modal("show");
   }else{
     //populate mobile result
+     debugger;
      $("#port-img").attr("src", totalResults[0].image_url);
      $("#port-img").attr("alt", "restaurant photo");
+     console.log("2-2");
      $("#port-name").text(totalResults[0].name);
+console.log("3");
      $("#port-address").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
+console.log("4");
      $("#port-phone").text(totalResults[0].display_phone);//just check append afterwards
+console.log("5");
      $("#port-direc a").attr("href", totalResults[0].url);
+console.log("6");
      $("#port-direc a").text(totalResults[0].url);
      $("#port-rating").text(totalResults[0].rating + " STARS");
      $("#port-price").text(totalResults[0].price);
@@ -495,7 +511,8 @@ function allResults(){
       $("#port-img2").attr("src", totalResults[0].image_url);
       $("#port-img2").attr("alt", "restaurant photo");
       $("#port-name2").text(totalResults[0].name);
-      $("#port-address2").text(results[0].location.address1+" " + totalResults[0].location.city);
+      $("#port-address2").text(totalResults[0].location.address1+" " + totalResults[0].location.city);
+ 
       $("#port-phone2").text(totalResults[0].display_phone);//just check append afterwards
       $("#port-direc2 a").attr("href", totalResults[0].url);
       $("#port-direc2 a").text("Get Directions");
@@ -510,20 +527,21 @@ function allResults(){
 
 
 // populate Yelp data on page
-function populateResult(){
+function populateResult(index){
  //for mobile result
- $("#port-img").attr("src", results[0].image_url);
+ 
+ $("#port-img").attr("src", results[index].image_url);
  $("#port-img").attr("alt", "restaurant photo");
 
  $("#port-name").text(results[0].name);
  $("#port-address").text(results[0].location.address1+" " + results[0].location.city);
 
-
+console.log("3");
  $("#port-phone").text(results[0].display_phone);//just check append afterwards
-
+console.log("4");
  $("#port-direc a").attr("href", results[0].url);
  $("#port-direc a").text(results[0].url);
-
+console.log("5");
  $("#port-rating").text(results[0].rating + " STARS");
  $("#port-price").text(results[0].price);
  $("#port-cat").text(results[0].categories[0].title);
@@ -531,7 +549,7 @@ function populateResult(){
  //for web result
  $("#port-img2").attr("src", results[0].image_url);
  $("#port-img2").attr("alt", "restaurant photo");
-
+console.log("6");
  $("#port-name2").text(results[0].name);
  $("#port-address2").text(results[0].location.address1+" " + results[0].location.city);
 
